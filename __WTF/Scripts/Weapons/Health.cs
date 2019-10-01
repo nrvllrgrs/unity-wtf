@@ -3,7 +3,6 @@ using Ludiq;
 
 namespace UnityEngine.Workshop
 {
-	[IncludeInSettings(true)]
 	public class Health : MonoBehaviour, IHealth
 	{
 		#region Variables
@@ -179,6 +178,11 @@ namespace UnityEngine.Workshop
 					GameObjectUtil.Destroy(gameObject);
 				}
 			}
+		}
+
+		public void Kill(GameObject killer = null)
+		{
+			Damage(new HealthEventArgs(gameObject, killer, value));
 		}
 
 		protected virtual void Update()
