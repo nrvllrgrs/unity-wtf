@@ -40,6 +40,16 @@ namespace UnityEngine.Workshop
 			return newMin + (GetPercent(value, oldMin, oldMax) * (newMax - newMin));
 		}
 
+		public static Vector3 GetHeading(Vector3 forward)
+		{
+			return Vector3.ProjectOnPlane(forward, Vector3.up).normalized;
+		}
+
+		public static Quaternion GetHeadingRotation(Vector3 forward)
+		{
+			return Quaternion.LookRotation(GetHeading(forward));
+		}
+
 		public static void Swap<T>(ref T a, ref T b)
 		{
 			T t = a;
