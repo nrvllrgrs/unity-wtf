@@ -1,9 +1,8 @@
-﻿using UnityEngine;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 
 namespace UnityEngine.Workshop
 {
-	public sealed class TimedCurve : MonoBehaviour
+	public sealed class TimedCurve : MonoBehaviour, ITimedCurve
 	{
 		#region Variables
 
@@ -24,15 +23,18 @@ namespace UnityEngine.Workshop
 
 		#region Events
 
-		[FoldoutGroup("Events")]
-		public BoolEvent onPlayStatusChanged = new BoolEvent();
+		[SerializeField, FoldoutGroup("Events")]
+		private BoolEvent m_onPlayStatusChanged = new BoolEvent();
 
-		[FoldoutGroup("Events")]
-		public SingleEvent onValueChanged = new SingleEvent();
+		[SerializeField, FoldoutGroup("Events")]
+		private SingleEvent m_onValueChanged = new SingleEvent();
 
 		#endregion
 
 		#region Properties
+
+		public BoolEvent onPlayStatusChanged => m_onPlayStatusChanged;
+		public SingleEvent onValueChanged => m_onValueChanged;
 
 		public bool isPlaying
 		{

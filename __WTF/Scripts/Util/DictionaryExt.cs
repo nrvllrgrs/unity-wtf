@@ -23,6 +23,11 @@ public static class DictionaryExt
 		return false;
 	}
 
+	public static K Get<T, K>(this Dictionary<T, K> dict, T key)
+	{
+		return dict.Get(key, default);
+	}
+
 	public static K Get<T, K>(this Dictionary<T, K> dict, T key, K fallback)
 	{
 		if (dict.ContainsKey(key))
@@ -51,7 +56,7 @@ public static class DictionaryExt
 			}
 			else
 			{
-				temp.Add(key, default(K));
+				temp.Add(key, default);
 			}
 		});
 
