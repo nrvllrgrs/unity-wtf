@@ -57,6 +57,14 @@ namespace UnityEngine.Workshop
 			b = t;
 		}
 
+		public static void Toggle(MonoBehaviour behaviour, bool isOn)
+		{
+			if (behaviour != null)
+			{
+				behaviour.enabled = isOn;
+			}
+		}
+
 		public static GameObject GetGameObject<T>(T a)
 		{
 			if (a == null)
