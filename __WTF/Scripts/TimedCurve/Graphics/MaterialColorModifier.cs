@@ -16,7 +16,7 @@ namespace Groundling
 			return Color.Lerp(source, target, value);
 		}
 
-		protected override void SetValue(Color value)
+		protected override void SetValue(Material material, Color value)
 		{
 			material.SetColor(propertyName, value);
 		}

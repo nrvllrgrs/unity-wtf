@@ -16,7 +16,7 @@ namespace Groundling
 			return Mathf.Lerp(source, target, value);
 		}
 
-		protected override void SetValue(float value)
+		protected override void SetValue(Material material, float value)
 		{
 			material.SetFloat(propertyName, value);
 		}

@@ -469,7 +469,7 @@ public static class GameObjectExt
 	public static T[] GetComponentsInChildren<T>(this GameObject gameObject, ref T[] value)
 		where T : Component
 	{
-		if (value == null)
+		if (value == null || value.Length == 0)
 		{
 			value = gameObject.GetComponentsInChildren<T>();
 		}
@@ -495,7 +495,7 @@ public static class GameObjectExt
 	public static T[] GetComponentsInParent<T>(this GameObject gameObject, ref T[] value)
 		where T : Component
 	{
-		if (value == null)
+		if (value == null || value.Length == 0)
 		{
 			value = gameObject.GetComponentsInParent<T>();
 		}

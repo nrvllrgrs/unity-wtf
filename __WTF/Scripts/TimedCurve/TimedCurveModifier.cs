@@ -7,10 +7,10 @@ namespace UnityEngine.Workshop
 	{
 		#region Variables
 
-		[Required]
+		[Required, PropertyOrder(-10)]
 		public TimedCurve timedCurve;
 
-		[SerializeField]
+		[SerializeField, BoxGroup("Modifier Settings"), ShowIf("ShowModified"), PropertyOrder(-1)]
 		private K m_modified;
 
 		[SerializeField, LabelText("Override Source"), BoxGroup("Modifier Settings")]
@@ -72,6 +72,14 @@ namespace UnityEngine.Workshop
 		protected abstract void SetValue(T value);
 		protected abstract T Lerp(float value);
 
+		#endregion
+
+		#region Editor Methods
+#if UNITY_EDITOR
+
+		protected virtual bool ShowModified() => true;
+
+#endif
 		#endregion
 	}
 }

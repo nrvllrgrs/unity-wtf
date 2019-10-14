@@ -94,7 +94,7 @@ namespace UnityEngine.Workshop
 		/// <summary>
 		/// Indicates whether component is invulerable at this moment
 		/// </summary>
-		public bool isInvulnerable { get { return !m_frameDamaged && Time.time < m_lastDamagedTimestamp + m_invulnerabilityTime; } }
+		public bool isInvulnerable => !m_frameDamaged && Time.time < m_lastDamagedTimestamp + m_invulnerabilityTime;
 
 		#endregion
 
@@ -148,10 +148,7 @@ namespace UnityEngine.Workshop
 			if (isInvulnerable)
 				return;
 
-			if (Damaging != null)
-			{
-				Damaging.Invoke(this, e);
-			}
+			Damaging?.Invoke(this, e);
 
 			// Change health
 			value = nextHealth;
@@ -160,10 +157,7 @@ namespace UnityEngine.Workshop
 			m_lastDamagedTimestamp = Time.time;
 			m_frameDamaged = true;
 
-			if (Damaged != null)
-			{
-				Damaged.Invoke(this, e);
-			}
+			Damaged?.Invoke(this, e);
 
 			// Object has been killed
 			if (value == 0f)
