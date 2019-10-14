@@ -9,11 +9,11 @@ namespace Groundling
 	{
 		#region Variables
 
-		[SerializeField, BoxGroup("Modifier Settings"), ShowIf("ShowModifiedChilder"), PropertyOrder(-1)]
+		[SerializeField, BoxGroup("Modifier Settings"), ShowIf("ShowModifiedList"), PropertyOrder(-1)]
 		private Renderer[] m_renderers;
 
 		[SerializeField, BoxGroup("Modifier Settings"), PropertyOrder(-1)]
-		protected bool modifyChildren = false;
+		protected bool useList = false;
 
 		[SerializeField, BoxGroup("Material Settings")]
 		protected string propertyName;
@@ -33,7 +33,7 @@ namespace Groundling
 		{
 			get
 			{
-				if (modifyChildren)
+				if (useList)
 				{
 					return materials.First();
 				}
@@ -48,7 +48,7 @@ namespace Groundling
 		{
 			get
 			{
-				if (!modifyChildren)
+				if (!useList)
 					return null;
 
 				return !hasManyMaterials
@@ -63,7 +63,7 @@ namespace Groundling
 			{
 				if (!m_hasManyMaterials.HasValue)
 				{
-					m_hasManyMaterials = !modifyChildren
+					m_hasManyMaterials = !useList
 						? modified.sharedMaterials.Length > 1
 						: renderers.Any(x => x.sharedMaterials.Length > 1);
 				}
@@ -89,7 +89,7 @@ namespace Groundling
 
 		protected override void SetValue(T value)
 		{
-			if (!modifyChildren)
+			if (!useList)
 			{
 				SetValue(material, value);
 			}
@@ -109,8 +109,8 @@ namespace Groundling
 		#region Editor Methods
 #if UNITY_EDITOR
 
-		protected override bool ShowModified() => !modifyChildren;
-		protected virtual bool ShowModifiedChilder() => modifyChildren;
+		protected override bool ShowModified() => !useList;
+		protected virtual bool ShowModifiedList() => useList;
 
 #endif
 		#endregion
