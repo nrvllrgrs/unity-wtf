@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -11,11 +10,12 @@ using Sirenix.Utilities.Editor;
 
 namespace UnityEngine.Workshop
 {
+	[ExecuteInEditMode]
 	public class Armor : SerializedMonoBehaviour
 	{
 		#region Variables
 
-		[SerializeField]
+		[OdinSerialize]
 		private Dictionary<string, ArmorInfo> m_armors;
 
 		#endregion
@@ -24,12 +24,14 @@ namespace UnityEngine.Workshop
 
 		public ArmorInfo GetArmorInfo(string armorKey)
 		{
-			return m_armors.TryGetValue(armorKey, out ArmorInfo armorInfo)
+			return armorKey != null && m_armors.TryGetValue(armorKey, out ArmorInfo armorInfo)
 				? armorInfo
 				: null;
 		}
 
-		private void OnValidate()
+#if UNITY_EDITOR
+
+		private void Update()
 		{
 			if (!ArmorManager.Ready)
 				return;
@@ -60,6 +62,8 @@ namespace UnityEngine.Workshop
 				m_armors = armors;
 			}
 		}
+
+#endif
 
 		#endregion
 

@@ -102,7 +102,7 @@ namespace UnityEngine.Workshop
 
 		public virtual void Heal(HealthEventArgs e)
 		{
-			float nextHealth = GetNextHealth(e.delta, e.damageType);
+			float nextHealth = GetNextHealth(e.delta);
 
 			// Check whether doing anything
 			if (nextHealth == value)
@@ -131,7 +131,7 @@ namespace UnityEngine.Workshop
 
 		public virtual void Damage(HealthEventArgs e)
 		{
-			float nextHealth = GetNextHealth(-e.delta, e.damageType);
+			float nextHealth = GetNextHealth(-e.delta);
 
 			// Check whether doing anything
 			if (nextHealth == value)
@@ -192,31 +192,9 @@ namespace UnityEngine.Workshop
 			m_frameDamaged = false;
 		}
 
-		private float GetNextHealth(float delta, string damageType)
+		private float GetNextHealth(float delta)
 		{
-			float modifiedDelta = delta;
-
-			var armor = GetComponent<Armor>();
-			if (armor != null)
-			{
-				var armorInfo = armor.GetArmorInfo(damageType);
-				if (armorInfo != null)
-				{
-					// Modify by absorption 
-					modifiedDelta -= armorInfo.absorption;
-
-					// Modify by percentage
-					modifiedDelta *= 1f - armorInfo.resistance;
-
-					if (armorInfo.threshold > 0)
-					{
-						// Clamp to threshold
-						modifiedDelta = Mathf.Min(modifiedDelta, armorInfo.threshold);
-					}
-				}
-			}
-
-			return Mathf.Clamp(m_health + modifiedDelta, 0, m_maxHealth);
+			return Mathf.Clamp(m_health + delta, 0, m_maxHealth);
 		}
 
 		#endregion
@@ -237,11 +215,6 @@ namespace UnityEngine.Workshop
 		/// </summary>
 		public float delta { get; private set; }
 
-		/// <summary>
-		/// Type of damage
-		/// </summary>
-		public string damageType { get; private set; }
-
 		public Vector3 origin { get; private set; }
 		public Vector3 contact { get; private set; }
 		public Vector3 normal { get; private set; }
@@ -250,20 +223,19 @@ namespace UnityEngine.Workshop
 
 		#region Constructors
 
-		public HealthEventArgs(GameObject victim, float delta, string damageType = null)
-			: this(victim, null, delta, damageType)
+		public HealthEventArgs(GameObject victim, float delta)
+			: this(victim, null, delta)
 		{ }
 
-		public HealthEventArgs(GameObject victim, GameObject killer, float delta, string damageType = null)
+		public HealthEventArgs(GameObject victim, GameObject killer, float delta)
 		{
 			this.victim = victim;
 			this.killer = killer;
 			this.delta = delta;
-			this.damageType = damageType;
 		}
 
-		public HealthEventArgs(GameObject victim, GameObject killer, float delta, Vector3 contact, Vector3 normal, string damageType = null)
-			: this(victim, killer, delta, damageType)
+		public HealthEventArgs(GameObject victim, GameObject killer, float delta, Vector3 contact, Vector3 normal)
+			: this(victim, killer, delta)
 		{
 			this.contact = contact;
 			this.normal = normal;
