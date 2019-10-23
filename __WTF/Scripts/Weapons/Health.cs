@@ -206,7 +206,7 @@ namespace UnityEngine.Workshop
 					modifiedDelta -= armorInfo.absorption;
 
 					// Modify by percentage
-					modifiedDelta *= 1f + armorInfo.percentage;
+					modifiedDelta *= 1f - armorInfo.resistance;
 
 					if (armorInfo.threshold > 0)
 					{

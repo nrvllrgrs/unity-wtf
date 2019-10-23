@@ -78,7 +78,7 @@ namespace UnityEngine.Workshop
 			public float absorption;
 
 			[Tooltip("Percentage damage reduction that lowers damage by a fixed fraction of the original damage -- stacking multiplicatively.")]
-			public float percentage;
+			public float resistance;
 
 			[Tooltip("Threshold damage reduction prevents all damage above a given threshold, while having no effect on damage below that threshold.")]
 			public float threshold;
@@ -111,7 +111,7 @@ namespace UnityEngine.Workshop
 				if (m_foldout[pair.Key])
 				{
 					pair.Value.absorption = EditorGUILayout.FloatField("Absorption", pair.Value.absorption);
-					pair.Value.percentage = EditorGUILayout.FloatField("Percentage", pair.Value.percentage);
+					pair.Value.resistance = Mathf.Min(EditorGUILayout.FloatField("Resistance", pair.Value.resistance), 1f);
 					pair.Value.threshold = Mathf.Max(EditorGUILayout.FloatField("Threshold", pair.Value.threshold), 0f);
 				}
 			}
