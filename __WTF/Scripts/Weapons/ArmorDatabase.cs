@@ -17,10 +17,7 @@ namespace UnityEngine.Workshop
 
 		#region Methods
 
-		public string[] GetDamageTypes()
-		{
-			return m_damageTypes;
-		}
+		public string[] GetDamageTypes() => m_damageTypes;
 
 		#endregion
 
