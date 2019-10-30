@@ -28,5 +28,17 @@ namespace UnityEngine.Workshop
 		}
 
 		#endregion
+
+		#region Editor Methods
+#if UNITY_EDITOR
+
+		[ContextMenu("Set Instance")]
+		private void SetInstance()
+		{
+			var instance = Instance;
+		}
+
+#endif
+		#endregion
 	}
 }

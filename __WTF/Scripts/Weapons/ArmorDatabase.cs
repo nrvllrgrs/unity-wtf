@@ -27,7 +27,7 @@ namespace UnityEngine.Workshop
 		[MenuItem("Assets/Create/Workshop/Armor Database")]
 		private static void CreateAsset()
 		{
-			var data = UnityUtil.CreateAsset<ArmorDatabase>();
+			UnityUtil.CreateAsset<ArmorDatabase>();
 		}
 
 #endif
