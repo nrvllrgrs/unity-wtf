@@ -66,7 +66,7 @@ namespace UnityEngine.Workshop
 		#region Properties
 
 		public bool isAlive => value > 0;
-		public float maxHealth => m_maxHealth;
+		public float maxHealth { get => m_maxHealth; set => m_maxHealth = value; }
 
 		public virtual float value
 		{

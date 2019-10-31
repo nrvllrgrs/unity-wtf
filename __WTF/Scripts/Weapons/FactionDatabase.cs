@@ -34,6 +34,10 @@ namespace UnityEngine.Workshop
 
 		#endregion
 
+		#region Properties
+
+		#endregion
+
 		#region Methods
 
 		public string[] GetFactionNames() => m_factions.Select(x => x.name).ToArray();

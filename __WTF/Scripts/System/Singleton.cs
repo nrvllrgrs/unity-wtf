@@ -26,7 +26,13 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         get
         {
-            if (applicationIsQuitting)
+			bool quitCheck = applicationIsQuitting;
+
+#if UNITY_EDITOR
+			quitCheck &= UnityEditor.EditorApplication.isPlaying;
+#endif
+
+			if (quitCheck)
             {
                 Debug.LogWarning("[Singleton] Instance '" + typeof(T) +
                     "' already destroyed on application quit." +
@@ -67,14 +73,27 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                     }
                 }
 
-                return _instance;
+#if UNITY_EDITOR
+				(_instance as Singleton<T>).Refresh();
+#endif
+
+				return _instance;
             }
         }
     }
 
-	public static bool Exists
+	public static bool Exists => _instance != null;
+
+	public static bool Ready
 	{
-		get { return !applicationIsQuitting && _instance != null; }
+		get
+		{
+#if UNITY_EDITOR
+			return !UnityEditor.EditorApplication.isPlaying;
+#else
+			return Exists;
+#endif
+		}
 	}
 
 	#endregion
@@ -114,6 +133,8 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         applicationIsQuitting = true;
     }
+
+	protected virtual void Refresh() { }
 
 	#endregion
 }

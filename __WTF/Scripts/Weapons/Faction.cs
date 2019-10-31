@@ -33,7 +33,7 @@ namespace UnityEngine.Workshop
 
 		private string[] GetFactionNames()
 		{
-			return FactionManager.Exists
+			return FactionManager.Ready
 				? FactionManager.Instance.GetFactionNames()
 				: new string[] { };
 		}
