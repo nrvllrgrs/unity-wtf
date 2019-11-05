@@ -176,14 +176,14 @@ namespace UnityEngine.Workshop
 
 		public void Kill(GameObject killer = null)
 		{
-			Damage(new HealthEventArgs(gameObject, killer, value));
+			Damage(new HealthEventArgs(gameObject, killer, value, null));
 		}
 
 		protected virtual void Update()
 		{
 			if (canRegenerate && regenerationRate != 0f)
 			{
-				Heal(new HealthEventArgs(gameObject, regenerationRate * Time.deltaTime));
+				Heal(new HealthEventArgs(gameObject, regenerationRate * Time.deltaTime, null));
 			}
 		}
 
@@ -213,30 +213,55 @@ namespace UnityEngine.Workshop
 		/// <summary>
 		/// Change in health
 		/// </summary>
-		public float delta { get; private set; }
+		public float impactDamage { get; private set; }
+		public string impactDamageType { get; private set; }
+
+		public float splashDamage { get; private set; }
+		public string splashDamageType { get; private set; }
 
 		public Vector3 origin { get; private set; }
 		public Vector3 contact { get; private set; }
 		public Vector3 normal { get; private set; }
 
+		/// <summary>
+		/// Total health change
+		/// </summary>
+		public float delta => -(impactDamage + splashDamage);
+
 		#endregion
 
 		#region Constructors
 
-		public HealthEventArgs(GameObject victim, float delta)
-			: this(victim, null, delta)
+		public HealthEventArgs(GameObject victim, float impactDamage, string impactDamageType)
+			: this(victim, null, impactDamage, impactDamageType)
 		{ }
 
-		public HealthEventArgs(GameObject victim, GameObject killer, float delta)
+		public HealthEventArgs(GameObject victim, float impactDamage, string impactDamageType, float splashDamage, string splashDamageType)
+			: this(victim, null, impactDamage, impactDamageType, 0f, null)
+		{ }
+
+		public HealthEventArgs(GameObject victim, GameObject killer, float impactDamage, string impactDamageType)
+			: this(victim, killer, impactDamage, impactDamageType, 0f, null)
+		{ }
+
+		public HealthEventArgs(GameObject victim, GameObject killer, float impactDamage, string impactDamageType, float splashDamage, string splashDamageType)
+			: this(victim, killer, impactDamage, impactDamageType, splashDamage, splashDamageType, Vector3.zero, Vector3.zero)
+		{ }
+
+		public HealthEventArgs(GameObject victim, GameObject killer, float impactDamage, string impactDamageType, Vector3 contact, Vector3 normal)
+			: this(victim, killer, impactDamage, impactDamageType, 0f, null, contact, normal)
+		{ }
+
+		public HealthEventArgs(GameObject victim, GameObject killer, float impactDamage, string impactDamageType, float splashDamage, string splashDamageType, Vector3 contact, Vector3 normal)
 		{
 			this.victim = victim;
 			this.killer = killer;
-			this.delta = delta;
-		}
 
-		public HealthEventArgs(GameObject victim, GameObject killer, float delta, Vector3 contact, Vector3 normal)
-			: this(victim, killer, delta)
-		{
+			this.impactDamage = impactDamage;
+			this.impactDamageType = impactDamageType;
+			this.splashDamage = splashDamage;
+			this.splashDamageType = splashDamageType;
+
 			this.contact = contact;
 			this.normal = normal;
 		}

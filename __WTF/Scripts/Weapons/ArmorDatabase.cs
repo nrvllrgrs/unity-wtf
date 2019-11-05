@@ -13,6 +13,8 @@ namespace UnityEngine.Workshop
 		[SerializeField]
 		private string[] m_damageTypes;
 
+
+
 		#endregion
 
 		#region Methods
@@ -31,6 +33,21 @@ namespace UnityEngine.Workshop
 		}
 
 #endif
+		#endregion
+
+		#region Structures
+
+		[System.Serializable]
+		public class DamageTypeInfo
+		{
+			public string name;
+
+			public StatusEffectFactory statusEffectFactory;
+
+			[Range(0f, 1f)]
+			public float percent = 1f;
+		}
+
 		#endregion
 	}
 }
