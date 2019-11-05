@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using System.Linq;
+using Sirenix.OdinInspector;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -11,15 +12,13 @@ namespace UnityEngine.Workshop
 		#region Variables
 
 		[SerializeField]
-		private string[] m_damageTypes;
-
-
+		private DamageTypeInfo[] m_damageTypes;
 
 		#endregion
 
 		#region Methods
 
-		public string[] GetDamageTypes() => m_damageTypes;
+		public string[] GetDamageTypes() => m_damageTypes.Select(x => x.name).ToArray();
 
 		#endregion
 
@@ -40,12 +39,28 @@ namespace UnityEngine.Workshop
 		[System.Serializable]
 		public class DamageTypeInfo
 		{
-			public string name;
+			#region Variables
 
-			public StatusEffectFactory statusEffectFactory;
+			[SerializeField]
+			private string m_name;
 
-			[Range(0f, 1f)]
-			public float percent = 1f;
+			[Header("Status Effect Settings")]
+
+			[SerializeField]
+			private StatusEffectFactory m_statusEffectFactory;
+
+			[SerializeField, Range(0f, 1f)]
+			private float m_percent = 1f;
+
+			#endregion
+
+			#region Properties
+
+			public string name => m_name;
+			public StatusEffectFactory statusEffectFactory => m_statusEffectFactory;
+			public float percent => m_percent;
+
+			#endregion
 		}
 
 		#endregion
