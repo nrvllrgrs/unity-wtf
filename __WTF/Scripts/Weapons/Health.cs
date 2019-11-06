@@ -267,5 +267,18 @@ namespace UnityEngine.Workshop
 		}
 
 		#endregion
+
+		#region Methods
+
+		public bool IsHitDamageType(string damageType)
+		{
+			if (string.IsNullOrWhiteSpace(damageType))
+				return false;
+
+			return (impactDamage > 0f && Equals(damageType, impactDamageType))
+				|| (splashDamage > 0f && Equals(damageType, splashDamageType));
+		}
+
+		#endregion
 	}
 }

@@ -20,6 +20,18 @@ namespace UnityEngine.Workshop
 				: null;
 		}
 
+		public bool TryGetStatusEffect(string damageType, out string statusEffect, out float percent)
+		{
+			if (m_database == null)
+			{
+				statusEffect = null;
+				percent = 0f;
+				return false;
+			}
+
+			return m_database.TryGetStatusEffect(damageType, out statusEffect, out percent);
+		}
+
 		#endregion
 	}
 }
