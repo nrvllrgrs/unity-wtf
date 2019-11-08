@@ -80,7 +80,6 @@ namespace Groundling
 			if (!material.HasProperty(propertyName))
 			{
 				Debug.LogErrorFormat("{0} is undefined in material!", propertyName);
-				Destroy(gameObject);
 				return;
 			}
 

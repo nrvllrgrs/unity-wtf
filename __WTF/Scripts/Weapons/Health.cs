@@ -115,6 +115,8 @@ namespace UnityEngine.Workshop
 				return;
 			}
 
+			//Debug.LogFormat("{0} healing {1} for {2} points", e.killer.name, e.victim.name, e.impactDamage);
+
 			if (Healing != null)
 			{
 				Healing.Invoke(this, e);
@@ -131,7 +133,7 @@ namespace UnityEngine.Workshop
 
 		public virtual void Damage(HealthEventArgs e)
 		{
-			float nextHealth = GetNextHealth(-e.delta);
+			float nextHealth = GetNextHealth(e.delta);
 
 			// Check whether doing anything
 			if (nextHealth == value)
@@ -143,6 +145,8 @@ namespace UnityEngine.Workshop
 				Heal(e);
 				return;
 			}
+
+			//Debug.LogFormat("{0} damaging {1} for {2} {3} impact damage", e.killer.name, e.victim.name, e.impactDamage, e.impactDamageType);
 		
 			// Ignore incoming damage if invulnerable
 			if (isInvulnerable)
