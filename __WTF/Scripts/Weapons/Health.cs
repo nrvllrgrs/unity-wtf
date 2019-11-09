@@ -105,16 +105,16 @@ namespace UnityEngine.Workshop
 		{
 			float nextHealth = GetNextHealth(e.delta);
 
-			// Check whether doing anything
-			if (nextHealth == value)
-				return;
-
 			// Check whether actually damaging
 			if (nextHealth < value)
 			{
 				Damage(e);
 				return;
 			}
+
+			// Check whether doing anything
+			if (nextHealth == value)
+				return;
 
 			//Debug.LogFormat("{0} healing {1} for {2} points", e.killer.name, e.victim.name, e.impactDamage);
 
@@ -136,10 +136,6 @@ namespace UnityEngine.Workshop
 		{
 			float nextHealth = GetNextHealth(e.delta);
 
-			// Check whether doing anything
-			if (nextHealth == value)
-				return;
-
 			// Check whether actually healing
 			if (nextHealth > value)
 			{
@@ -147,7 +143,12 @@ namespace UnityEngine.Workshop
 				return;
 			}
 
+			// Notify listeners that gameObject was hit (even though may not be damaged)
 			Hit?.Invoke(this, e);
+
+			// Check whether doing anything
+			if (nextHealth == value)
+				return;
 
 			//Debug.LogFormat("{0} damaging {1} for {2} {3} impact damage", e.killer.name, e.victim.name, e.impactDamage, e.impactDamageType);
 		
