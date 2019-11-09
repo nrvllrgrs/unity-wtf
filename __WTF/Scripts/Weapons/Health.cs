@@ -57,6 +57,7 @@ namespace UnityEngine.Workshop
 		public event System.EventHandler ValueChanged;
 		public event HealthEventHandler Healing;
 		public event HealthEventHandler Healed;
+		public event HealthEventHandler Hit;
 		public event HealthEventHandler Damaging;
 		public event HealthEventHandler Damaged;
 		public event HealthEventHandler Killed;
@@ -146,6 +147,8 @@ namespace UnityEngine.Workshop
 				return;
 			}
 
+			Hit?.Invoke(this, e);
+
 			//Debug.LogFormat("{0} damaging {1} for {2} {3} impact damage", e.killer.name, e.victim.name, e.impactDamage, e.impactDamageType);
 		
 			// Ignore incoming damage if invulnerable
@@ -187,7 +190,7 @@ namespace UnityEngine.Workshop
 		{
 			if (canRegenerate && regenerationRate != 0f)
 			{
-				Heal(new HealthEventArgs(gameObject, regenerationRate * Time.deltaTime, null));
+				Heal(new HealthEventArgs(gameObject, -regenerationRate * Time.deltaTime, null));
 			}
 		}
 
