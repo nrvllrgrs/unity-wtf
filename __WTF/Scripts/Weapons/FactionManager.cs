@@ -12,7 +12,6 @@ using Sirenix.Utilities.Editor;
 
 namespace UnityEngine.Workshop
 {
-	[ExecuteInEditMode]
 	public class FactionManager : Singleton<FactionManager>
 	{
 		#region Variables
@@ -46,20 +45,11 @@ namespace UnityEngine.Workshop
 			return m_database.GetDamageFactor(m_database.GetRelationship(a, b));
 		}
 
-		#endregion
-
-		#region Editor Methods
-#if UNITY_EDITOR
-
-		private void Update()
+		protected override void Refresh()
 		{
-			if (m_database != null)
-			{
-				m_database.Refresh();
-			}
+			m_database.Refresh();
 		}
 
-#endif
 		#endregion
 	}
 }

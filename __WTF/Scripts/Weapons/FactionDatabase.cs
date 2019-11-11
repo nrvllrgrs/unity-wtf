@@ -24,13 +24,17 @@ namespace UnityEngine.Workshop
 		[SerializeField]
 		private Dictionary<Faction.RelationshipType, RelationshipMapInfo> m_relationshipMap;
 
-		[SerializeField]
+		[SerializeField, HideLabel]
 		private RelationshipMapInfo m_playerFactionMap;
 
 		[Header("Relationship Settings")]
 
 		[SerializeField]
 		private Dictionary<string, Dictionary<string, RelationshipInfo>> m_relationships;
+
+		#endregion
+
+		#region Properties
 
 		#endregion
 

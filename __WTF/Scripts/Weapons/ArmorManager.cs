@@ -2,19 +2,12 @@
 
 namespace UnityEngine.Workshop
 {
-	[ExecuteInEditMode]
 	public class ArmorManager : Singleton<ArmorManager>
 	{
 		#region Variables
 
 		[SerializeField, Required, InlineEditor]
 		private ArmorDatabase m_database;
-
-		#endregion
-
-		#region Properties
-
-		public static bool Ready => !Application.isPlaying || Exists;
 
 		#endregion
 
@@ -27,18 +20,18 @@ namespace UnityEngine.Workshop
 				: null;
 		}
 
-		#endregion
-
-		#region Editor Methods
-#if UNITY_EDITOR
-
-		[ContextMenu("Set Instance")]
-		private void SetInstance()
+		public bool TryGetStatusEffect(string damageType, out string statusEffect, out float percent)
 		{
-			var instance = Instance;
+			if (m_database == null)
+			{
+				statusEffect = null;
+				percent = 0f;
+				return false;
+			}
+
+			return m_database.TryGetStatusEffect(damageType, out statusEffect, out percent);
 		}
 
-#endif
 		#endregion
 	}
 }

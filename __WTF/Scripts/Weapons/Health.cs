@@ -57,6 +57,7 @@ namespace UnityEngine.Workshop
 		public event System.EventHandler ValueChanged;
 		public event HealthEventHandler Healing;
 		public event HealthEventHandler Healed;
+		public event HealthEventHandler Hit;
 		public event HealthEventHandler Damaging;
 		public event HealthEventHandler Damaged;
 		public event HealthEventHandler Killed;
@@ -66,7 +67,7 @@ namespace UnityEngine.Workshop
 		#region Properties
 
 		public bool isAlive => value > 0;
-		public float maxHealth => m_maxHealth;
+		public float maxHealth { get => m_maxHealth; set => m_maxHealth = value; }
 
 		public virtual float value
 		{
@@ -104,16 +105,18 @@ namespace UnityEngine.Workshop
 		{
 			float nextHealth = GetNextHealth(e.delta);
 
-			// Check whether doing anything
-			if (nextHealth == value)
-				return;
-
 			// Check whether actually damaging
 			if (nextHealth < value)
 			{
 				Damage(e);
 				return;
 			}
+
+			// Check whether doing anything
+			if (nextHealth == value)
+				return;
+
+			//Debug.LogFormat("{0} healing {1} for {2} points", e.killer.name, e.victim.name, e.impactDamage);
 
 			if (Healing != null)
 			{
@@ -131,11 +134,7 @@ namespace UnityEngine.Workshop
 
 		public virtual void Damage(HealthEventArgs e)
 		{
-			float nextHealth = GetNextHealth(-e.delta);
-
-			// Check whether doing anything
-			if (nextHealth == value)
-				return;
+			float nextHealth = GetNextHealth(e.delta);
 
 			// Check whether actually healing
 			if (nextHealth > value)
@@ -143,6 +142,15 @@ namespace UnityEngine.Workshop
 				Heal(e);
 				return;
 			}
+
+			// Notify listeners that gameObject was hit (even though may not be damaged)
+			Hit?.Invoke(this, e);
+
+			// Check whether doing anything
+			if (nextHealth == value)
+				return;
+
+			//Debug.LogFormat("{0} damaging {1} for {2} {3} impact damage", e.killer.name, e.victim.name, e.impactDamage, e.impactDamageType);
 		
 			// Ignore incoming damage if invulnerable
 			if (isInvulnerable)
@@ -176,14 +184,14 @@ namespace UnityEngine.Workshop
 
 		public void Kill(GameObject killer = null)
 		{
-			Damage(new HealthEventArgs(gameObject, killer, value));
+			Damage(new HealthEventArgs(gameObject, killer, value, null));
 		}
 
 		protected virtual void Update()
 		{
 			if (canRegenerate && regenerationRate != 0f)
 			{
-				Heal(new HealthEventArgs(gameObject, regenerationRate * Time.deltaTime));
+				Heal(new HealthEventArgs(gameObject, -regenerationRate * Time.deltaTime, null));
 			}
 		}
 
@@ -213,32 +221,70 @@ namespace UnityEngine.Workshop
 		/// <summary>
 		/// Change in health
 		/// </summary>
-		public float delta { get; private set; }
+		public float impactDamage { get; private set; }
+		public string impactDamageType { get; private set; }
+
+		public float splashDamage { get; private set; }
+		public string splashDamageType { get; private set; }
 
 		public Vector3 origin { get; private set; }
 		public Vector3 contact { get; private set; }
 		public Vector3 normal { get; private set; }
 
+		/// <summary>
+		/// Total health change
+		/// </summary>
+		public float delta => -(impactDamage + splashDamage);
+
 		#endregion
 
 		#region Constructors
 
-		public HealthEventArgs(GameObject victim, float delta)
-			: this(victim, null, delta)
+		public HealthEventArgs(GameObject victim, float impactDamage, string impactDamageType)
+			: this(victim, null, impactDamage, impactDamageType)
 		{ }
 
-		public HealthEventArgs(GameObject victim, GameObject killer, float delta)
+		public HealthEventArgs(GameObject victim, float impactDamage, string impactDamageType, float splashDamage, string splashDamageType)
+			: this(victim, null, impactDamage, impactDamageType, 0f, null)
+		{ }
+
+		public HealthEventArgs(GameObject victim, GameObject killer, float impactDamage, string impactDamageType)
+			: this(victim, killer, impactDamage, impactDamageType, 0f, null)
+		{ }
+
+		public HealthEventArgs(GameObject victim, GameObject killer, float impactDamage, string impactDamageType, float splashDamage, string splashDamageType)
+			: this(victim, killer, impactDamage, impactDamageType, splashDamage, splashDamageType, Vector3.zero, Vector3.zero)
+		{ }
+
+		public HealthEventArgs(GameObject victim, GameObject killer, float impactDamage, string impactDamageType, Vector3 contact, Vector3 normal)
+			: this(victim, killer, impactDamage, impactDamageType, 0f, null, contact, normal)
+		{ }
+
+		public HealthEventArgs(GameObject victim, GameObject killer, float impactDamage, string impactDamageType, float splashDamage, string splashDamageType, Vector3 contact, Vector3 normal)
 		{
 			this.victim = victim;
 			this.killer = killer;
-			this.delta = delta;
-		}
 
-		public HealthEventArgs(GameObject victim, GameObject killer, float delta, Vector3 contact, Vector3 normal)
-			: this(victim, killer, delta)
-		{
+			this.impactDamage = impactDamage;
+			this.impactDamageType = impactDamageType;
+			this.splashDamage = splashDamage;
+			this.splashDamageType = splashDamageType;
+
 			this.contact = contact;
 			this.normal = normal;
+		}
+
+		#endregion
+
+		#region Methods
+
+		public bool IsHitDamageType(string damageType)
+		{
+			if (string.IsNullOrWhiteSpace(damageType))
+				return false;
+
+			return (impactDamage > 0f && Equals(damageType, impactDamageType))
+				|| (splashDamage > 0f && Equals(damageType, splashDamageType));
 		}
 
 		#endregion
