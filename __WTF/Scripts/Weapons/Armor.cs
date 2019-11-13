@@ -29,6 +29,9 @@ namespace UnityEngine.Workshop
 			return m_armors.GetArmorInfo(key);
 		}
 
+		#endregion
+
+		#region Editor Methods
 #if UNITY_EDITOR
 
 		private void Update()
@@ -53,6 +56,7 @@ namespace UnityEngine.Workshop
 		{
 			#region Variables
 
+			[SerializeField]
 			private List<ArmorInfo> m_armors;
 
 			#endregion
@@ -79,12 +83,11 @@ namespace UnityEngine.Workshop
 				}
 
 				var damageTypes = ArmorManager.Instance.GetDamageTypes().ToList();
-				//var damageTypes = new List<string>()
-				//{
-				//	"Slashing", "Bludgeoning", "Piercing", "Fire", "Cold", "Lightning", "Magic"
-				//};
 				foreach (var key in damageTypes)
 				{
+					if (string.IsNullOrWhiteSpace(key))
+						continue;
+
 					var item = m_armors.SingleOrDefault(x => x.key == key);
 					if (item == null)
 					{
@@ -102,12 +105,23 @@ namespace UnityEngine.Workshop
 				}
 			}
 
+			public void AddArmorInfo(ArmorInfo armorInfo)
+			{
+				m_armors.Add(armorInfo);
+			}
+
 			public ArmorInfo GetArmorInfo(string key)
 			{
 				if (string.IsNullOrWhiteSpace(key))
 					return null;
 
 				return m_armors.SingleOrDefault(x => x.key == key);
+			}
+
+			public string[] GetFilteredDamageTypes()
+			{
+				return m_armors.Select(x => x.key)
+					.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
 			}
 
 			IEnumerator<ArmorInfo> IEnumerable<ArmorInfo>.GetEnumerator()
@@ -129,7 +143,7 @@ namespace UnityEngine.Workshop
 			#region Variables
 
 			[SerializeField]
-			private readonly string m_key;
+			private string m_key;
 
 			[SerializeField, Tooltip("Subtractive damage reduction that prevents a fixed amount of damage.")]
 			public float absorption;
