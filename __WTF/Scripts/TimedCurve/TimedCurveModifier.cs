@@ -8,7 +8,7 @@ namespace UnityEngine.Workshop
 		#region Variables
 
 		[Required, PropertyOrder(-10)]
-		public TimedCurve timedCurve;
+		public BaseTimedCurve timedCurve;
 
 		[SerializeField, BoxGroup("Modifier Settings"), ShowIf("ShowModified"), PropertyOrder(-1)]
 		private K m_modified;

@@ -2,7 +2,7 @@
 
 namespace UnityEngine.Workshop
 {
-	public sealed class TimedCurve : MonoBehaviour, ITimedCurve
+	public sealed class TimedCurve : BaseTimedCurve
 	{
 		#region Variables
 
@@ -33,13 +33,13 @@ namespace UnityEngine.Workshop
 
 		#region Properties
 
-		public BoolEvent onPlayStatusChanged => m_onPlayStatusChanged;
-		public SingleEvent onValueChanged => m_onValueChanged;
+		public override BoolEvent onPlayStatusChanged => m_onPlayStatusChanged;
+		public override SingleEvent onValueChanged => m_onValueChanged;
 
-		public bool isPlaying
+		public override bool isPlaying
 		{
 			get { return m_isPlaying; }
-			private set
+			protected set
 			{
 				if (isPlaying == value)
 					return;
@@ -52,12 +52,12 @@ namespace UnityEngine.Workshop
 			}
 		}
 
-		public bool isReversed => m_isReversed;
+		public override bool isReversed => m_isReversed;
 
-		public float value
+		public override float value
 		{
 			get { return m_value; }
-			private set
+			protected set
 			{
 				if (this.value == value)
 					return;
@@ -67,8 +67,8 @@ namespace UnityEngine.Workshop
 			}
 		}
 
-		public float time => duration - Mathf.Clamp(m_remainingTime, 0f, duration);
-		public float timePercent => time / duration;
+		public override float time => duration - Mathf.Clamp(m_remainingTime, 0f, duration);
+		public override float timePercent => time / duration;
 
 		#endregion
 

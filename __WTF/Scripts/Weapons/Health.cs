@@ -101,6 +101,7 @@ namespace UnityEngine.Workshop
 
 		#region Methods
 
+		[Button, FoldoutGroup("Editor")]
 		public virtual void Heal(HealthEventArgs e)
 		{
 			float nextHealth = GetNextHealth(e.delta);
@@ -132,6 +133,7 @@ namespace UnityEngine.Workshop
 			}
 		}
 
+		[Button, FoldoutGroup("Editor")]
 		public virtual void Damage(HealthEventArgs e)
 		{
 			float nextHealth = GetNextHealth(e.delta);
@@ -182,6 +184,7 @@ namespace UnityEngine.Workshop
 			}
 		}
 
+		[Button, FoldoutGroup("Editor")]
 		public void Kill(GameObject killer = null)
 		{
 			Damage(new HealthEventArgs(gameObject, killer, value, null));

@@ -88,12 +88,15 @@ namespace UnityEngine.Workshop
 					if (string.IsNullOrWhiteSpace(key))
 						continue;
 
-					var item = m_armors.SingleOrDefault(x => x.key == key);
+					var item = m_armors.FirstOrDefault(x => x.key == key);
 					if (item == null)
 					{
 						m_armors.Add(new ArmorInfo(key));
 					}
 				}
+
+				// Remove all items with duplicate keys
+				m_armors = m_armors.Distinct().ToList();
 
 				// Remove all invalid keys
 				for (int i = m_armors.Count - 1; i >= 0; --i)
@@ -115,7 +118,7 @@ namespace UnityEngine.Workshop
 				if (string.IsNullOrWhiteSpace(key))
 					return null;
 
-				return m_armors.SingleOrDefault(x => x.key == key);
+				return m_armors.FirstOrDefault(x => x.key == key);
 			}
 
 			public string[] GetFilteredDamageTypes()
@@ -167,6 +170,27 @@ namespace UnityEngine.Workshop
 			public ArmorInfo(string key)
 			{
 				m_key = key;
+			}
+
+			#endregion
+
+			#region Methods
+
+			public override bool Equals(object obj)
+			{
+				if (obj == null)
+					return false;
+
+				var other = obj as ArmorInfo;
+				if (other == null)
+					return false;
+
+				return GetHashCode() == other.GetHashCode();
+			}
+
+			public override int GetHashCode()
+			{
+				return key.GetHashCode();
 			}
 
 			#endregion
