@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace UnityEngine.Workshop
+﻿namespace UnityEngine.Workshop
 {
 	public class LookAtCamera : MonoBehaviour
 	{
