@@ -81,8 +81,25 @@ public static class RandomUtil
 
 	public static T WeightedRandom<T>(this IEnumerable<IWeightedItem<T>> items, System.Random random = null)
 	{
-		return items.ElementAt(items.Select(x => x.weight)
-			.WeightedRandomIndex(random)).item;
+		return items.ElementAt(items.Select(x => x.weight).WeightedRandomIndex(random)).item;
+	}
+
+	public static T[] WeightedRandom<T>(this IEnumerable<IWeightedItem<T>> items, int count, System.Random random = null)
+	{
+		var result = new List<T>();
+		var modifiedItems = new List<IWeightedItem<T>>(items);
+		for (int i = 0; i < count; ++i)
+		{
+			int index = modifiedItems.Select(x => x.weight).WeightedRandomIndex(random);
+
+			// Add selected item to result
+			result.Add(modifiedItems[index].item);
+
+			// Remove item at index so it is not selected again
+			modifiedItems.RemoveAt(index);
+		}
+
+		return result.ToArray();
 	}
 
 	public static IList<T> Shuffle<T>(this IList<T> list, System.Random random = null)
