@@ -12,6 +12,9 @@ namespace UnityEngine.Workshop
 		[MinValue(0f)]
 		public float duration = 1f;
 
+		[MinValue(0f)]
+		public float reverseDurationFactor = 1f;
+
 		[SerializeField]
 		private bool m_playOnAwake;
 
@@ -191,7 +194,7 @@ namespace UnityEngine.Workshop
 			}
 			else if (m_isReversed && t > 0f)
 			{
-				m_remainingTime += Time.deltaTime;
+				m_remainingTime += Time.deltaTime * reverseDurationFactor;
 			}
 			else
 			{
