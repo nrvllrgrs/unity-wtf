@@ -46,6 +46,14 @@ public static class Vector3Ext
 		return dst - src;
 	}
 
+	public static Vector3 GetHorizontalDirection(this Vector3 src, Vector3 dst)
+	{
+		Vector3 dir = src.GetDirection(dst);
+		dir.y = 0f;
+
+		return dir;
+	}
+
 	public static Vector3 GetPointOnLineByDistance(this Vector3 a, Vector3 b, float distance)
 	{
 		return a + (b - a).normalized * distance;
