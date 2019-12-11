@@ -96,6 +96,16 @@ public static class Vector3Ext
 		return new Vector3(Mathf.Abs(a.x), Mathf.Abs(a.y), Mathf.Abs(a.z));
 	}
 
+	public static Vector3 WrapAngle(this Vector3 a)
+	{
+		return new Vector3(a.x.WrapAngle(), a.y.WrapAngle(), a.z.WrapAngle());
+	}
+
+	public static Vector3 ModAngle(this Vector3 a)
+	{
+		return new Vector3(a.x.Mod(360f), a.y.Mod(360f), a.z.Mod(360f));
+	}
+	
 	public static Vector3 Clamp(this Vector3 value, Vector3 min, Vector3 max)
 	{
 		return new Vector3(
