@@ -155,6 +155,11 @@ public static class GameObjectExt
 		return ancenstors.ToArray();
 	}
 
+	public static bool IsAncestor(this Transform transform, Transform ancestor)
+	{
+		return transform.GetAncestors().Contains(ancestor);
+	}
+
 	public static Transform[] GetDescendants(this Transform transform)
 	{
 		List<Transform> children = new List<Transform>();
@@ -166,6 +171,11 @@ public static class GameObjectExt
 		}
 
 		return children.ToArray();
+	}
+
+	public static bool IsDescendant(this Transform transform, Transform descendant)
+	{
+		return transform.GetDescendants().Contains(descendant);
 	}
 
 	public static string GetHierarchyPath(this Transform transform)
