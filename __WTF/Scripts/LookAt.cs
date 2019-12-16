@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using Sirenix.OdinInspector;
 
 namespace UnityEngine.Workshop
 {
@@ -6,9 +6,24 @@ namespace UnityEngine.Workshop
 	{
 		#region Variables
 
+		[ShowIf("exposeTarget")]
 		public Transform target;
+
+		[ShowIf("exposeVariables")]
 		public Vector3 positionOffset;
+
+		[ShowIf("exposeVariables")]
 		public Vector3 worldUp = Vector3.up;
+
+		[ShowIf("exposeVariables")]
+		public bool headingOnly = false;
+
+		#endregion
+
+		#region Properties
+
+		protected virtual bool exposeTarget => true;
+		protected virtual bool exposeVariables => true;
 
 		#endregion
 
@@ -18,8 +33,19 @@ namespace UnityEngine.Workshop
 		{
 			if (target != null)
 			{
-				transform.LookAt(target.position + positionOffset, worldUp.normalized);
+				UpdateFacing();
 			}
+		}
+
+		protected virtual void UpdateFacing()
+		{
+			var position = target.position + positionOffset;
+			if (headingOnly)
+			{
+				position.y = transform.position.y;
+			}
+
+			transform.LookAt(position, worldUp.normalized);
 		}
 
 		#endregion
