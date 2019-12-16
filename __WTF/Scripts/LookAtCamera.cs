@@ -1,13 +1,20 @@
-﻿namespace UnityEngine.Workshop
+using Sirenix.OdinInspector;
+
+namespace UnityEngine.Workshop
 {
-	public class LookAtCamera : MonoBehaviour
+	public class LookAtCamera : LookAt
 	{
 		#region Variables
 
-		public Vector3 positionOffset;
-		public Vector3 worldUp = Vector3.up;
+		[HideIf("headingOnly"), PropertyOrder(-1)]
+		public bool parallelCameraFacing;
 
-		private LookAt m_lookAt;
+		#endregion
+
+		#region Properties
+
+		protected override bool exposeTarget => false;
+		protected override bool exposeVariables => !parallelCameraFacing;
 
 		#endregion
 
@@ -15,27 +22,20 @@
 
 		protected virtual void OnEnable()
 		{
-			if (gameObject.TryAddComponent(out m_lookAt))
-			{
-				m_lookAt.hideFlags |= HideFlags.HideInHierarchy | HideFlags.HideInInspector;
-			}
-			m_lookAt.enabled = true;
-
 			this.WaitUntil(
 				() => { return Camera.main != null; },
-				() =>
-				{
-					m_lookAt.target = Camera.main.transform;
-					m_lookAt.positionOffset = positionOffset;
-					m_lookAt.worldUp = worldUp;
-				});
+				() => { target = Camera.main.transform; });
 		}
 
-		protected virtual void OnDisable()
+		protected override void UpdateFacing()
 		{
-			if (m_lookAt != null)
+			if (headingOnly || !parallelCameraFacing)
 			{
-				m_lookAt.enabled = false;
+				base.UpdateFacing();
+			}
+			else
+			{
+				transform.rotation = Quaternion.LookRotation(-Camera.main.transform.forward);
 			}
 		}
 
