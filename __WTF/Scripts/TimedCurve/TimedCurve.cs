@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using UnityEngine.Events;
+using Sirenix.OdinInspector;
 
 namespace UnityEngine.Workshop
 {
@@ -27,17 +28,21 @@ namespace UnityEngine.Workshop
 		#region Events
 
 		[SerializeField, FoldoutGroup("Events")]
-		private BoolEvent m_onPlayStatusChanged = new BoolEvent();
+		private UnityEvent m_onStarted = new UnityEvent();
 
 		[SerializeField, FoldoutGroup("Events")]
 		private SingleEvent m_onValueChanged = new SingleEvent();
+
+		[SerializeField, FoldoutGroup("Events")]
+		private UnityEvent m_onStopped = new UnityEvent();
 
 		#endregion
 
 		#region Properties
 
-		public override BoolEvent onPlayStatusChanged => m_onPlayStatusChanged;
+		public override UnityEvent onStarted => m_onStarted;
 		public override SingleEvent onValueChanged => m_onValueChanged;
+		public override UnityEvent onStopped => m_onStopped;
 
 		public override bool isPlaying
 		{
@@ -51,7 +56,14 @@ namespace UnityEngine.Workshop
 				m_isPlaying = value;
 				this.value = Evaluate(out float t);
 				
-				onPlayStatusChanged.Invoke(value);
+				if (value)
+				{
+					onStarted.Invoke();
+				}
+				else
+				{
+					onStopped.Invoke();
+				}
 			}
 		}
 

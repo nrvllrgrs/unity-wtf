@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using UnityEngine.Events;
+using Sirenix.OdinInspector;
 
 namespace UnityEngine.Workshop
 {
@@ -16,17 +17,21 @@ namespace UnityEngine.Workshop
 		#region Events
 
 		[SerializeField, FoldoutGroup("Events")]
-		private BoolEvent m_onPlayStatusChanged = new BoolEvent();
+		private UnityEvent m_onStarted = new UnityEvent();
 
 		[SerializeField, FoldoutGroup("Events")]
 		private SingleEvent m_onValueChanged = new SingleEvent();
+
+		[SerializeField, FoldoutGroup("Events")]
+		private UnityEvent m_onStopped = new UnityEvent();
 
 		#endregion
 
 		#region Properties
 
-		public override BoolEvent onPlayStatusChanged => m_onPlayStatusChanged;
+		public override UnityEvent onStarted => m_onStarted;
 		public override SingleEvent onValueChanged => m_onValueChanged;
+		public override UnityEvent onStopped => m_onStopped;
 
 		public override bool isPlaying
 		{
@@ -69,8 +74,9 @@ namespace UnityEngine.Workshop
 				return;
 
 			m_timedCurve = TimedCurveManager.Instance.Get(m_key);
-			m_timedCurve.onPlayStatusChanged.AddListener(PlayStatusChanged);
+			m_timedCurve.onStarted.AddListener(TimedCurveStarted);
 			m_timedCurve.onValueChanged.AddListener(ValueChanged);
+			m_timedCurve.onStopped.AddListener(TimedCurveStopped);
 		}
 
 		private void Unregister()
@@ -79,18 +85,24 @@ namespace UnityEngine.Workshop
 				return;
 
 			var timedCurve = TimedCurveManager.Instance.Get(m_key);
-			timedCurve.onPlayStatusChanged.RemoveListener(PlayStatusChanged);
+			timedCurve.onStarted.RemoveListener(TimedCurveStarted);
 			timedCurve.onValueChanged.RemoveListener(ValueChanged);
+			timedCurve.onStopped.RemoveListener(TimedCurveStopped);
 		}
 
-		private void PlayStatusChanged(bool isOn)
+		private void TimedCurveStarted()
 		{
-			onPlayStatusChanged.Invoke(isOn);
+			onStarted.Invoke();
 		}
 
 		private void ValueChanged(float value)
 		{
 			onValueChanged.Invoke(value);
+		}
+
+		private void TimedCurveStopped()
+		{
+			onStopped.Invoke();
 		}
 
 		#endregion

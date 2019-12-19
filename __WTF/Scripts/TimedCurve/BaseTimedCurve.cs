@@ -1,11 +1,14 @@
-﻿namespace UnityEngine.Workshop
+﻿using UnityEngine.Events;
+
+namespace UnityEngine.Workshop
 {
 	public abstract class BaseTimedCurve : MonoBehaviour
 	{
 		#region Properties
 
-		public abstract BoolEvent onPlayStatusChanged { get; }
+		public abstract UnityEvent onStarted { get; }
 		public abstract SingleEvent onValueChanged { get; }
+		public abstract UnityEvent onStopped { get; }
 
 		public abstract bool isPlaying { get; protected set; }
 		public abstract bool isReversed { get; }

@@ -197,8 +197,8 @@ namespace UnityEngine.Workshop
 			{
 				m_timedCurve = gameObject.AddComponent<TimedCurve>();
 				m_timedCurve.wrapMode = WrapMode.Default;
-				m_timedCurve.onValueChanged.AddListener(ValueChanged);
-				m_timedCurve.onPlayStatusChanged.AddListener(PlayStatusChanged);
+				m_timedCurve.onValueChanged.AddListener(TimedCurve_ValueChanged);
+				m_timedCurve.onStopped.AddListener(TimedCurve_Stopped);
 			}
 
 			// Setup fade transition behavior
@@ -206,7 +206,7 @@ namespace UnityEngine.Workshop
 			m_timedCurve.curve = curve;
 		}
 
-		private void ValueChanged(float value)
+		private void TimedCurve_ValueChanged(float value)
 		{
 			audio.volume = 1f - value;
 			if (m_crossFade)
@@ -215,22 +215,19 @@ namespace UnityEngine.Workshop
 			}
 		}
 
-		private void PlayStatusChanged(bool isPlaying)
+		private void TimedCurve_Stopped()
 		{
-			if (!isPlaying)
+			if (!m_crossFade)
 			{
-				if (!m_crossFade)
-				{
-					audio.Stop();
-				}
-				else
-				{
-					// Make next audio the new current audio
-					UnityUtil.Swap(ref m_audio, ref m_nextAudio);
+				audio.Stop();
+			}
+			else
+			{
+				// Make next audio the new current audio
+				UnityUtil.Swap(ref m_audio, ref m_nextAudio);
 
-					// Stop previous audio
-					nextAudio.Stop();
-				}
+				// Stop previous audio
+				nextAudio.Stop();
 			}
 		}
 
