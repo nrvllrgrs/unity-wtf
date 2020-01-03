@@ -172,10 +172,7 @@ namespace UnityEngine.Workshop
 			// Object has been killed
 			if (value == 0f)
 			{
-				if (Killed != null)
-				{
-					Killed.Invoke(this, e);
-				}
+				Killed?.Invoke(this, e);
 				
 				if (m_destroyOnKilled)
 				{
