@@ -45,11 +45,13 @@ namespace UnityEngine.Workshop
 			return m_database.GetDamageFactor(m_database.GetRelationship(a, b));
 		}
 
+		#if UNITY_EDITOR
 		protected override void Refresh()
 		{
 			m_database.Refresh();
 		}
+		#endif
 
-		#endregion
-	}
+#endregion
+    }
 }
