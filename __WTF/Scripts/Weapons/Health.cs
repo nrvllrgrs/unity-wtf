@@ -25,8 +25,8 @@ namespace UnityEngine.Workshop
 		[SerializeField, Tooltip("Indicates whether gameObject is destroyed when health is zero"), BoxGroup("Health Settings")]
 		private bool m_destroyOnKilled;
 
-		[SerializeField, Min(0), Tooltip("How long to wait until destroying the gameobject"), BoxGroup("Health Settings")]
-		private float m_destroyDelay = 2f;
+		[SerializeField, ShowIf("m_destroyOnKilled"), Min(0), Tooltip("How long to wait until destroying the gameobject"), BoxGroup("Health Settings")]
+		private float m_destroyDelay = 0f;
 
 		/// <summary>
 		/// Seconds before regeneration begins
@@ -110,6 +110,11 @@ namespace UnityEngine.Workshop
 		{
 			float nextHealth = GetNextHealth(e.delta);
 
+			if (m_dying)
+			{
+				return;
+			}
+
 			// Check whether actually damaging
 			if (nextHealth < value)
 			{
@@ -152,6 +157,11 @@ namespace UnityEngine.Workshop
 			// Notify listeners that gameObject was hit (even though may not be damaged)
 			Hit?.Invoke(this, e);
 
+			if (m_dying)
+			{
+				return;
+			}
+
 			// Check whether doing anything
 			if (nextHealth == value)
 				return;
@@ -180,7 +190,7 @@ namespace UnityEngine.Workshop
 				
 				if (m_destroyOnKilled && !m_dying)
 				{
-					GameObjectUtil.Destroy(gameObject, m_destroyDelay = 2f);
+					GameObjectUtil.Destroy(gameObject, m_destroyDelay);
 					m_dying = true;
 				}
 			}
