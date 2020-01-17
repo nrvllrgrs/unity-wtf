@@ -25,6 +25,9 @@ namespace UnityEngine.Workshop
 		[SerializeField, Tooltip("Indicates whether gameObject is destroyed when health is zero"), BoxGroup("Health Settings")]
 		private bool m_destroyOnKilled;
 
+		[SerializeField, ShowIf("m_destroyOnKilled"), Min(0), Tooltip("How long to wait until destroying the gameobject"), BoxGroup("Health Settings")]
+		private float m_destroyDelay = 0f;
+
 		/// <summary>
 		/// Seconds before regeneration begins
 		/// </summary>
@@ -49,6 +52,7 @@ namespace UnityEngine.Workshop
 		/// Indicates whether damaged this frame
 		/// </summary>
 		private bool m_frameDamaged;
+		private bool m_dying = false;
 
 		#endregion
 
@@ -106,6 +110,11 @@ namespace UnityEngine.Workshop
 		{
 			float nextHealth = GetNextHealth(e.delta);
 
+			if (m_dying)
+			{
+				return;
+			}
+
 			// Check whether actually damaging
 			if (nextHealth < value)
 			{
@@ -148,6 +157,11 @@ namespace UnityEngine.Workshop
 			// Notify listeners that gameObject was hit (even though may not be damaged)
 			Hit?.Invoke(this, e);
 
+			if (m_dying)
+			{
+				return;
+			}
+
 			// Check whether doing anything
 			if (nextHealth == value)
 				return;
@@ -174,9 +188,10 @@ namespace UnityEngine.Workshop
 			{
 				Killed?.Invoke(this, e);
 				
-				if (m_destroyOnKilled)
+				if (m_destroyOnKilled && !m_dying)
 				{
-					GameObjectUtil.Destroy(gameObject);
+					GameObjectUtil.Destroy(gameObject, m_destroyDelay);
+					m_dying = true;
 				}
 			}
 		}
