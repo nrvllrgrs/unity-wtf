@@ -33,9 +33,13 @@ namespace UnityEngine.Workshop
 			{
 				base.UpdateFacing();
 			}
-			else
+			else if (!reverse)
 			{
 				transform.rotation = Quaternion.LookRotation(-Camera.main.transform.forward);
+			}
+			else
+			{
+				transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
 			}
 		}
 
