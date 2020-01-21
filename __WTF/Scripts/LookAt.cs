@@ -18,6 +18,8 @@ namespace UnityEngine.Workshop
 		[ShowIf("exposeVariables")]
 		public bool headingOnly = false;
 
+		public bool reverse = false;
+
 		#endregion
 
 		#region Properties
@@ -45,7 +47,14 @@ namespace UnityEngine.Workshop
 				position.y = transform.position.y;
 			}
 
-			transform.LookAt(position, worldUp.normalized);
+			if (!reverse)
+			{
+				transform.LookAt(position, worldUp.normalized);
+			}
+			else
+			{
+				transform.LookAt(2f * transform.position - position, worldUp.normalized);
+			}
 		}
 
 		#endregion
