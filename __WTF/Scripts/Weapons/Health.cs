@@ -40,6 +40,9 @@ namespace UnityEngine.Workshop
 		[Tooltip("Health regenerated per second"), BoxGroup("Regeneration Settings")]
 		public float regenerationRate;
 
+		[SerializeField, BoxGroup("Invulnerability Settings")]
+		private bool m_isInvulnerable;
+
 		/// <summary>
 		/// Seconds of invulnerability after taking damage
 		/// </summary>
@@ -99,7 +102,17 @@ namespace UnityEngine.Workshop
 		/// <summary>
 		/// Indicates whether component is invulerable at this moment
 		/// </summary>
-		public bool isInvulnerable => !m_frameDamaged && Time.time < m_lastDamagedTimestamp + m_invulnerabilityTime;
+		public bool isInvulnerable
+		{
+			get { return m_isInvulnerable || (!m_frameDamaged && Time.time < m_lastDamagedTimestamp + m_invulnerabilityTime); }
+			set
+			{
+				if (isInvulnerable == value)
+					return;
+
+				m_isInvulnerable = value;
+			}
+		}
 
 		#endregion
 
