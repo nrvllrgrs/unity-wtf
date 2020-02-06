@@ -73,7 +73,7 @@ public static class GameObjectExt
 		return false;
 	}
 
-	public static T AddComponent<T>(this GameObject obj, T source)
+	public static T CopyComponent<T>(this GameObject obj, T source)
 		where T : Component
 	{
 		T destination = obj.AddComponent<T>();
@@ -82,26 +82,26 @@ public static class GameObjectExt
 		return destination;
 	}
 
-	public static Collider AddCollider(this GameObject obj, Collider srcCollider)
+	public static Collider CopyCollider(this GameObject obj, Collider srcCollider)
 	{
 		if (srcCollider == null)
 			return null;
 
 		if (srcCollider is BoxCollider)
 		{
-			return obj.AddComponent(srcCollider as BoxCollider);
+			return obj.CopyComponent(srcCollider as BoxCollider);
 		}
 		else if (srcCollider is SphereCollider)
 		{
-			return obj.AddComponent(srcCollider as SphereCollider);
+			return obj.CopyComponent(srcCollider as SphereCollider);
 		}
 		else if (srcCollider is CapsuleCollider)
 		{
-			return obj.AddComponent(srcCollider as CapsuleCollider);
+			return obj.CopyComponent(srcCollider as CapsuleCollider);
 		}
 		else if (srcCollider is MeshCollider)
 		{
-			return obj.AddComponent(srcCollider as MeshCollider);
+			return obj.CopyComponent(srcCollider as MeshCollider);
 		}
 
 		return null;
@@ -575,7 +575,7 @@ public static class GameObjectExt
 				if (srcAnimator != null && srcAnimator.enabled)
 				{
 					// Create animator
-					var dstAnimator = clone.AddComponent(srcAnimator);
+					var dstAnimator = clone.CopyComponent(srcAnimator);
 					dstAnimator.Rebind();
 
 					result = true;
@@ -590,8 +590,8 @@ public static class GameObjectExt
 				{
 					// Create renderer / mesh filter
 					// Copy renderer / mesh filter fields
-					var dstRenderer = clone.AddComponent(srcRenderer);
-					var dstMeshFilter = clone.AddComponent(srcMeshFilter);
+					var dstRenderer = clone.CopyComponent(srcRenderer);
+					var dstMeshFilter = clone.CopyComponent(srcMeshFilter);
 
 					var dstMaterials = new Material[srcRenderer.materials.Length];
 					for (int i = 0; i < srcRenderer.materials.Length; ++i)
