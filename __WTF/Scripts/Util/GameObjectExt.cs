@@ -173,6 +173,12 @@ public static class GameObjectExt
 		return children.ToArray();
 	}
 
+	/// <summary>
+	/// Indicate whether transform is a descendant
+	/// </summary>
+	/// <param name="transform"></param>
+	/// <param name="descendant">Check whether this is a descendant of transform</param>
+	/// <returns></returns>
 	public static bool IsDescendant(this Transform transform, Transform descendant)
 	{
 		return transform.GetDescendants().Contains(descendant);
