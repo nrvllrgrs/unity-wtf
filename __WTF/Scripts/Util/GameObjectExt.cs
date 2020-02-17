@@ -331,7 +331,7 @@ public static class GameObjectExt
 	
 	public static void MoveToScene(this GameObject obj, Scene scene, bool force = false)
 	{
-		if (Equals(obj.scene, scene))
+		if (Equals(obj.scene, scene) || !scene.isLoaded)
 			return;
 
 		if (obj.transform.parent != null && !force)
