@@ -97,12 +97,31 @@ namespace UnityEngine.Workshop
 
 		private void ValueChanged(float value)
 		{
-			onValueChanged.Invoke(value);
+			if (enabled)
+			{
+				onValueChanged.Invoke(value);
+			}
 		}
 
 		private void TimedCurveStopped()
 		{
 			onStopped.Invoke();
+		}
+
+		public void StopAtBeginning()
+		{
+			StopAtTime(0f);
+		}
+
+		public void StopAtEnd()
+		{
+			StopAtTime(1f);
+		}
+
+		public void StopAtTime(float t)
+		{
+			enabled = false;
+			onValueChanged.Invoke(m_timedCurve.curve.Evaluate(t));
 		}
 
 		#endregion
