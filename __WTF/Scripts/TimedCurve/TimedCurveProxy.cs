@@ -108,6 +108,11 @@ namespace UnityEngine.Workshop
 			onStopped.Invoke();
 		}
 
+		public void Play()
+		{
+			enabled = true;
+		}
+
 		public void StopAtBeginning()
 		{
 			StopAtTime(0f);
