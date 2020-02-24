@@ -22,7 +22,7 @@ namespace UnityEngine.Workshop
 
 		public bool TryGetStatusEffect(string damageType, out string statusEffect, out float percent)
 		{
-#if STATUS_EFFECT
+#if STATUS_EFFECTS
 
 			var info = m_damageTypes.SingleOrDefault(x => x.name == damageType);
 			if (info != null)
@@ -63,7 +63,7 @@ namespace UnityEngine.Workshop
 			[SerializeField]
 			private string m_name;
 
-#if STATUS_EFFECT
+#if STATUS_EFFECTS
 
 			[Header("Status Effect Settings")]
 
@@ -80,7 +80,7 @@ namespace UnityEngine.Workshop
 
 			public string name => m_name;
 
-#if STATUS_EFFECT
+#if STATUS_EFFECTS
 
 			public string statusEffect => m_statusEffect;
 			public float percent => m_percent;
