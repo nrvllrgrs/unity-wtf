@@ -194,10 +194,10 @@ namespace UnityEngine.Workshop
 										case JoinType.Average:
 											// Calculate average values
 											value = (firstKey.value + lastKey.value) / 2f;
-											inTangent = (firstKey.inTangent + lastKey.inTangent) / 2f;
-											outTangent = (firstKey.outTangent + lastKey.outTangent) / 2f;
-											inWeight = (firstKey.inWeight + lastKey.inWeight) / 2f;
-											outWeight = (firstKey.outWeight + lastKey.outWeight) / 2f;
+											inTangent = lastKey.inTangent;
+											outTangent = firstKey.outTangent;
+											inWeight = lastKey.outWeight;
+											outWeight = firstKey.outWeight;
 											break;
 
 										case JoinType.First:
