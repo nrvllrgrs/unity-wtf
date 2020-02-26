@@ -34,7 +34,7 @@ namespace UnityEngine.Workshop
 		[SerializeField]
 		private CurveInfo[] m_curves;
 
-		public const float FUDGE_FACTOR = 0.0001f;
+		public const float FUDGE_FACTOR = 0.001f;
 
 		#endregion
 
@@ -159,8 +159,6 @@ namespace UnityEngine.Workshop
 								if (j == 0 && i > 0)
 									continue;
 
-								// TODO: Apply amplitude / frequency offsets
-
 								float time = (m_rawCurve.keys[j].time * step) + (i * step) + (m_frequencyOffset * step);
 
 								float value = m_rawCurve.keys[j].value;
@@ -180,7 +178,7 @@ namespace UnityEngine.Workshop
 										case JoinType.Both:
 											// Shift time backwards by a fudge
 											// Add key from the last keyframe
-											m_curve.AddKey(new Keyframe(time - (FUDGE_FACTOR * step), lastKey.value, lastKey.inTangent, lastKey.outTangent, lastKey.inWeight, lastKey.outWeight));
+											m_curve.AddKey(new Keyframe(time - (FUDGE_FACTOR * step), lastKey.value + m_amplitudeOffset, lastKey.inTangent, lastKey.outTangent, lastKey.inWeight, lastKey.outWeight));
 
 											// Shift time forwards by a fudge
 											time += FUDGE_FACTOR * step;
