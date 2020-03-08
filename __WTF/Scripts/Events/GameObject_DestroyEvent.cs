@@ -1,6 +1,6 @@
 ﻿namespace UnityEngine
 {
-	public class GameObejct_DestroyEvent : MonoBehaviour
+	public class GameObject_DestroyEvent : MonoBehaviour
 	{
 		#region Events
 
