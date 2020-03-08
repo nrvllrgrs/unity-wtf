@@ -9,6 +9,8 @@ namespace UnityEngine.Workshop
 		public abstract UnityEvent onStarted { get; }
 		public abstract SingleEvent onValueChanged { get; }
 		public abstract UnityEvent onStopped { get; }
+		public abstract UnityEvent onBeginningReached { get; }
+		public abstract UnityEvent onEndReached { get; }
 
 		public abstract bool isPlaying { get; protected set; }
 		public abstract bool isReversed { get; }

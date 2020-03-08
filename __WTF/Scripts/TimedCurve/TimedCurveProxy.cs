@@ -25,6 +25,12 @@ namespace UnityEngine.Workshop
 		[SerializeField, FoldoutGroup("Events")]
 		private UnityEvent m_onStopped = new UnityEvent();
 
+		[SerializeField, FoldoutGroup("Events")]
+		private UnityEvent m_onBeginningReached = new UnityEvent();
+
+		[SerializeField, FoldoutGroup("Events")]
+		private UnityEvent m_onEndReached = new UnityEvent();
+
 		#endregion
 
 		#region Properties
@@ -32,6 +38,8 @@ namespace UnityEngine.Workshop
 		public override UnityEvent onStarted => m_onStarted;
 		public override SingleEvent onValueChanged => m_onValueChanged;
 		public override UnityEvent onStopped => m_onStopped;
+		public override UnityEvent onBeginningReached => m_onBeginningReached;
+		public override UnityEvent onEndReached => m_onEndReached;
 
 		public override bool isPlaying
 		{
@@ -77,6 +85,8 @@ namespace UnityEngine.Workshop
 			m_timedCurve.onStarted.AddListener(TimedCurveStarted);
 			m_timedCurve.onValueChanged.AddListener(ValueChanged);
 			m_timedCurve.onStopped.AddListener(TimedCurveStopped);
+			m_timedCurve.onBeginningReached.AddListener(TimedCurveBeginningReached);
+			m_timedCurve.onEndReached.AddListener(TimedCurveEndReached);
 		}
 
 		private void Unregister()
@@ -88,6 +98,8 @@ namespace UnityEngine.Workshop
 			timedCurve.onStarted.RemoveListener(TimedCurveStarted);
 			timedCurve.onValueChanged.RemoveListener(ValueChanged);
 			timedCurve.onStopped.RemoveListener(TimedCurveStopped);
+			m_timedCurve.onBeginningReached.RemoveListener(TimedCurveBeginningReached);
+			m_timedCurve.onEndReached.RemoveListener(TimedCurveEndReached);
 		}
 
 		private void TimedCurveStarted()
@@ -106,6 +118,16 @@ namespace UnityEngine.Workshop
 		private void TimedCurveStopped()
 		{
 			onStopped.Invoke();
+		}
+
+		private void TimedCurveBeginningReached()
+		{
+			onBeginningReached.Invoke();
+		}
+
+		private void TimedCurveEndReached()
+		{
+			onEndReached.Invoke();
 		}
 
 		public void Play()
