@@ -2,6 +2,8 @@
 {
 	public class PersistentAddressable : MonoBehaviour
 	{
+#if UNITY_ADDRESSABLE
+
 		#region Variables
 
 		[SerializeField]
@@ -46,5 +48,6 @@
 		}
 
 		#endregion
+#endif
 	}
 }
