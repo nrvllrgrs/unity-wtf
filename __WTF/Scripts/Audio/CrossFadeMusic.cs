@@ -32,13 +32,9 @@ namespace UnityEngine.Workshop
 
 		public void CrossFade()
 		{
-			if (!MusicManager.Exists)
-			{
-				Debug.LogError("MusicManager is undefined!");
-				return;
-			}
-
-			MusicManager.Instance.CrossFade(m_music, m_duration, m_curve);
+			this.WaitUntil(
+				() => MusicManager.Exists,
+				() => MusicManager.Instance.CrossFade(m_music, m_duration, m_curve));
 		}
 
 		#endregion
