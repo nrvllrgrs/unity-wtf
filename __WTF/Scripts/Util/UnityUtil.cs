@@ -57,6 +57,15 @@ namespace UnityEngine.Workshop
 			b = t;
 		}
 
+		public static T[] Concat<T>(T[] a, T[] b)
+		{
+			T[] list = new T[a.Length + b.Length];
+			a.CopyTo(list, 0);
+			b.CopyTo(list, a.Length);
+
+			return list;
+		}
+
 		public static void Toggle(MonoBehaviour behaviour, bool isOn)
 		{
 			if (behaviour != null)
