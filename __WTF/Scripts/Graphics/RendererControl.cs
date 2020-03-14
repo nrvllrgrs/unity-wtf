@@ -7,7 +7,7 @@ public class RendererControl : MonoBehaviour
 	#region Variables
 
 	[SerializeField]
-	private bool m_initializeShow = true;
+	private bool m_showOnAwake = true;
 
 	private Dictionary<Renderer, bool> m_rendererStatuses;
 
@@ -23,7 +23,7 @@ public class RendererControl : MonoBehaviour
 	{
 		get
 		{
-			if (m_initializeShow)
+			if (m_showOnAwake)
 			{
 				return m_showCount <= 0;
 			}
@@ -63,17 +63,25 @@ public class RendererControl : MonoBehaviour
 	#endregion
 
 	#region Methods
-	
+
+	private void Awake()
+	{
+		if (!m_showOnAwake)
+		{
+			ForceHide();
+		}
+	}
+
 	[FoldoutGroup("Editor"), Button]
 	public void Show()
 	{
-		showCount += m_initializeShow ? -1 : 1;
+		showCount += m_showOnAwake ? -1 : 1;
 	}
 
 	[FoldoutGroup("Editor"), Button]
 	public void ForceShow()
 	{
-		if (m_initializeShow)
+		if (m_showOnAwake)
 		{
 			showCount = 0;
 		}
@@ -86,13 +94,13 @@ public class RendererControl : MonoBehaviour
 	[FoldoutGroup("Editor"), Button]
 	public void Hide()
 	{
-		showCount += m_initializeShow ? 1 : -1;
+		showCount += m_showOnAwake ? 1 : -1;
 	}
 
 	[FoldoutGroup("Editor"), Button]
 	public void ForceHide()
 	{
-		if (!m_initializeShow)
+		if (!m_showOnAwake)
 		{
 			showCount = 0;
 		}
