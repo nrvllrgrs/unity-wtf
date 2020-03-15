@@ -136,6 +136,10 @@ namespace UnityEngine.Workshop
 
 		public void CrossFade(AudioClip nextClip, float duration, AnimationCurve curve = null)
 		{
+			// Cross fading to playing clip, skip
+			if (nextClip == audio.clip)
+				return;
+
 			InitTimedCurve(duration, curve);
 
 			if (nextAudio == null)
