@@ -21,6 +21,9 @@
 
 		public static void SetAsset(GameObject obj, AssetReferenceGameObject asset)
 		{
+			if (obj == null)
+				return;
+
 			var persistentAddressable = obj.GetComponent<PersistentAddressable>();
 			if (persistentAddressable != null)
 			{
@@ -30,6 +33,9 @@
 
 		public static AssetReferenceGameObject GetAsset(GameObject obj)
 		{
+			if (obj == null)
+				return null;
+
 			TryGetAsset(obj, out AssetReferenceGameObject asset);
 			return asset;
 		}

@@ -94,10 +94,10 @@ namespace UnityEngine.Workshop
 			if (!TimedCurveManager.Instance.ContainsKey(m_key))
 				return;
 
-			var timedCurve = TimedCurveManager.Instance.Get(m_key);
-			timedCurve.onStarted.RemoveListener(TimedCurveStarted);
-			timedCurve.onValueChanged.RemoveListener(ValueChanged);
-			timedCurve.onStopped.RemoveListener(TimedCurveStopped);
+			m_timedCurve = TimedCurveManager.Instance.Get(m_key);
+			m_timedCurve.onStarted.RemoveListener(TimedCurveStarted);
+			m_timedCurve.onValueChanged.RemoveListener(ValueChanged);
+			m_timedCurve.onStopped.RemoveListener(TimedCurveStopped);
 			m_timedCurve.onBeginningReached.RemoveListener(TimedCurveBeginningReached);
 			m_timedCurve.onEndReached.RemoveListener(TimedCurveEndReached);
 		}
@@ -148,7 +148,10 @@ namespace UnityEngine.Workshop
 		public void StopAtTime(float t)
 		{
 			enabled = false;
-			onValueChanged.Invoke(m_timedCurve.curve.Evaluate(t));
+			if (m_timedCurve != null)
+			{
+				onValueChanged.Invoke(m_timedCurve.curve.Evaluate(t));
+			}
 		}
 
 		#endregion
