@@ -39,6 +39,9 @@ namespace UnityEngine.Workshop
 		[FoldoutGroup("Events")]
 		public SetEvent onItemRemoved = new SetEvent();
 
+		[FoldoutGroup("Events")]
+		public UnityEvent onEmpty = new UnityEvent(); 
+
 		#endregion
 
 		#region Methods
@@ -64,6 +67,11 @@ namespace UnityEngine.Workshop
 		public virtual void Remove(GameObject item)
 		{
 			m_set.Remove(item);
+
+			if (m_set.count == 0)
+			{
+				onEmpty.Invoke();
+			}
 		}
 
 		public virtual void DestroyItems()
