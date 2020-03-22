@@ -115,7 +115,7 @@ namespace UnityEngine.Workshop
 		}
 
 		[Button, FoldoutGroup("Editor")]
-		public void Play()
+		public override void Play()
 		{
 			m_remainingTime = duration;
 			m_isReversed = false;
@@ -176,27 +176,23 @@ namespace UnityEngine.Workshop
 		}
 
 		[Button, FoldoutGroup("Editor")]
-		public void StopAtBeginning()
+		public override void StopAtBeginning()
 		{
 			m_isReversed = true;
-			m_remainingTime = duration;
-
-			if (isPlaying)
-			{
-				// Stop playing after time remaining to evaluate value correctly
-				isPlaying = false;
-			}
-			else
-			{
-				value = Evaluate(out float t);
-			}
+			StopAtTime(0f);
 		}
 
 		[Button, FoldoutGroup("Editor")]
-		public void StopAtEnd()
+		public override void StopAtEnd()
 		{
 			m_isReversed = false;
-			m_remainingTime = 0f;
+			StopAtTime(1f);
+		}
+
+		[Button, FoldoutGroup("Editor")]
+		public override void StopAtTime(float t)
+		{
+			m_remainingTime = duration - (duration * t);
 
 			if (isPlaying)
 			{
@@ -205,7 +201,7 @@ namespace UnityEngine.Workshop
 			}
 			else
 			{
-				value = Evaluate(out float t);
+				value = Evaluate(out float time);
 			}
 		}
 

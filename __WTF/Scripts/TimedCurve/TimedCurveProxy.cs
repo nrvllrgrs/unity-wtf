@@ -130,22 +130,22 @@ namespace UnityEngine.Workshop
 			onEndReached.Invoke();
 		}
 
-		public void Play()
+		public override void Play()
 		{
 			enabled = true;
 		}
 
-		public void StopAtBeginning()
+		public override void StopAtBeginning()
 		{
 			StopAtTime(0f);
 		}
 
-		public void StopAtEnd()
+		public override void StopAtEnd()
 		{
 			StopAtTime(1f);
 		}
 
-		public void StopAtTime(float t)
+		public override void StopAtTime(float t)
 		{
 			enabled = false;
 			if (m_timedCurve != null)

@@ -19,5 +19,14 @@ namespace UnityEngine.Workshop
 		public abstract float timePercent { get; }
 
 		#endregion
+
+		#region Methods
+
+		public abstract void Play();
+		public abstract void StopAtBeginning();
+		public abstract void StopAtEnd();
+		public abstract void StopAtTime(float t);
+
+		#endregion
 	}
 }
