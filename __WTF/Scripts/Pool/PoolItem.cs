@@ -19,37 +19,47 @@ namespace UnityEngine.Workshop
 		[SerializeField]
 		private bool m_useAutoKey;
 
+		private bool m_dirty;
+
 		#endregion
 
 		#region Properties
 
-		public string key { get { return m_useAutoKey ? m_autoKey : m_key; } }
-		public int maxCount { get => m_maxCount; }
-		public bool useAutoKey { get => m_useAutoKey; }
+		public string key => m_useAutoKey ? m_autoKey : m_key;
+		public int maxCount => m_maxCount;
+		public bool useAutoKey => m_useAutoKey;
 
 		#endregion
 
 		#region Methods
 
-		private void Start()
+		private void Awake()
 		{
 			this.WaitUntil(
-				() => { return PoolManager.Exists; },
-				() => { PoolManager.Instance.Add(this); });
+				() => PoolManager.Exists,
+				() => PoolManager.Instance.Add(this));
 		}
 
 		private void OnEnable()
 		{
-			var particleSystem = GetComponentInChildren<ParticleSystem>();
-			if (particleSystem != null && particleSystem.main.playOnAwake)
+			if (m_dirty)
 			{
-				particleSystem.Play();
+				this.WaitUntil(
+				() => PoolManager.Exists && PoolManager.Instance.Contains(this),
+				() =>
+				{
+					// Reset PoolItem components
+					foreach (var poolItem in GetComponentsInChildren<IPoolItem>())
+					{
+						poolItem.Restart();
+					}
+				});
 			}
+		}
 
-			foreach (var health in GetComponentsInChildren<Health>())
-			{
-				health.value = health.maxHealth;
-			}
+		private void OnDisable()
+		{
+			m_dirty = true;
 		}
 
 		#endregion
@@ -66,6 +76,15 @@ namespace UnityEngine.Workshop
 		}
 
 #endif
+		#endregion
+	}
+
+	public interface IPoolItem
+	{
+		#region Methods
+
+		void Restart();
+
 		#endregion
 	}
 }

@@ -40,6 +40,15 @@ namespace UnityEngine.Workshop
 		[Tooltip("Health regenerated per second"), BoxGroup("Regeneration Settings")]
 		public float regenerationRate;
 
+		/// <summary>
+		/// Seconds between regeneration events
+		/// </summary>
+		[SerializeField, Tooltip("Seconds between regeneration events"), BoxGroup("Regeneration Settings"), MinValue(0f)]
+		private float m_regenerationStep;
+
+		[SerializeField, BoxGroup("Regeneration Settings")]
+		private Transform m_regenerationContactPoint;
+
 		[SerializeField, BoxGroup("Invulnerability Settings")]
 		private bool m_isInvulnerable;
 
@@ -50,6 +59,7 @@ namespace UnityEngine.Workshop
 		private float m_invulnerabilityTime;
 
 		private float m_lastDamagedTimestamp = Mathf.NegativeInfinity;
+		private float m_lastRegenerationTimestamp = Mathf.NegativeInfinity;
 
 		/// <summary>
 		/// Indicates whether damaged this frame
@@ -97,7 +107,22 @@ namespace UnityEngine.Workshop
 		/// <summary>
 		/// Indicates whether component can regenerate at this moment
 		/// </summary>
-		public bool canRegenerate => regenerationRate < 0f || Time.time > m_lastDamagedTimestamp + m_regenerationDelay;
+		public bool canRegenerate => (regenerationRate < 0f || Time.time >= m_lastDamagedTimestamp + m_regenerationDelay) && Time.time >= m_lastRegenerationTimestamp + m_regenerationStep;
+
+		/// <summary>
+		/// Transform to act as contact point during regeneration
+		/// </summary>
+		public Transform regenerationContactPoint
+		{
+			get
+			{
+				if (m_regenerationContactPoint == null)
+				{
+					m_regenerationContactPoint = transform;
+				}
+				return m_regenerationContactPoint;
+			}
+		}
 
 		/// <summary>
 		/// Indicates whether component is invulerable at this moment
@@ -219,7 +244,8 @@ namespace UnityEngine.Workshop
 		{
 			if (canRegenerate && regenerationRate != 0f)
 			{
-				Heal(new HealthEventArgs(gameObject, -regenerationRate * Time.deltaTime, null));
+				Heal(new HealthEventArgs(gameObject, -regenerationRate * (m_regenerationStep == 0f ? Time.deltaTime : m_regenerationStep), null, regenerationContactPoint.position, Vector3.zero));
+				m_lastRegenerationTimestamp = Time.time;
 			}
 		}
 
@@ -270,6 +296,10 @@ namespace UnityEngine.Workshop
 
 		public HealthEventArgs(GameObject victim, float impactDamage, string impactDamageType)
 			: this(victim, null, impactDamage, impactDamageType)
+		{ }
+
+		public HealthEventArgs(GameObject victim, float impactDamage, string impactDamageType, Vector3 contact, Vector3 normal)
+			: this(victim, null, impactDamage, impactDamageType, contact, normal)
 		{ }
 
 		public HealthEventArgs(GameObject victim, float impactDamage, string impactDamageType, float splashDamage, string splashDamageType)

@@ -12,17 +12,7 @@
 
 		#region Properties
 
-		public new AudioSource audio
-		{
-			get
-			{
-				if (m_audio == null)
-				{
-					m_audio = GetComponent<AudioSource>();
-				}
-				return m_audio;
-			}
-		}
+		public new AudioSource audio => this.GetComponent(ref m_audio);
 
 		#endregion
 

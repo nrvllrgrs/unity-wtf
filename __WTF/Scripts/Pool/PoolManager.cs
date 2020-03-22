@@ -79,6 +79,20 @@ namespace UnityEngine.Workshop
 			return entry.Next();
 		}
 
+		public bool Contains(PoolItem item)
+		{
+			return m_items.FirstOrDefault(x => Equals(x.key, item.key)) != null;
+		}
+
+		public bool CanInstantiate(PoolItem item)
+		{
+			if (!item.useAutoKey)
+				return false;
+
+			var entry = m_items.FirstOrDefault(x => Equals(x.key, item.key));
+			return entry == null || entry.count < entry.maxCount;
+		}
+
 		#endregion
 
 		#region Structures
@@ -108,10 +122,10 @@ namespace UnityEngine.Workshop
 
 			#region Properties
 
-			public string key { get { return m_key; } }
-			public int count { get { return m_items.Count; } }
-			public int maxCount { get { return m_maxCount; } }
-			public bool hideInHierarchy { get { return m_hideInHierarchy; } }
+			public string key => m_key;
+			public int count => m_items.Count;
+			public int maxCount => m_maxCount;
+			public bool hideInHierarchy => m_hideInHierarchy;
 
 		#endregion
 

@@ -56,13 +56,13 @@ public static class GameObjectUtil
 	public static GameObject Instantiate(GameObject template, Vector3 position, Quaternion rotation, Transform parent)
 	{
 		PoolItem item = template.GetComponent<PoolItem>();
-		if (item == null || !PoolManager.Exists)
+		if (!PoolManager.Exists || item == null || PoolManager.Instance.CanInstantiate(item))
 		{
 			return Object.Instantiate(template, position, rotation, parent);
 		}
 
 		var instance = PoolManager.Instance.Get(item);
-		if (item == null)
+		if (instance == null)
 		{
 			Debug.LogErrorFormat("Could not instantiate {0}! You may want to increase the {1} limit.", item.name, item.key);
 			return null;
