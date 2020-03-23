@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -17,12 +16,59 @@ namespace UnityEngine.Workshop
 	{
 		#region Variables
 
+		[SerializeField, Tooltip("Indicates whether ancestor Armor values are overridden (i.e. not combined)."), ShowIf("HasAncestorArmor")]
+		private bool m_overrideAncestor;
+
 		[SerializeField]
 		private ArmorCollection m_armors = new ArmorCollection();
+
+		private Armor m_ancestorArmor;
+
+		#endregion
+
+		#region Properties
+
+		public Armor ancestorArmor => this.GetComponentInAncestor(ref m_ancestorArmor);
 
 		#endregion
 
 		#region Methods
+
+		public float GetModifiedAbsorption(string key)
+		{
+			return GetModifiedArmor(
+				key,
+				(info) => info.absorption,
+				(info, ancestorArmor) => info.absorption + ancestorArmor.GetModifiedAbsorption(key));
+		}
+
+		public float GetModifiedResistance(string key)
+		{
+			return GetModifiedArmor(
+				key,
+				(info) => info.resistance,
+				(info, ancestorArmor) => info.resistance + ancestorArmor.GetModifiedResistance(key));
+		}
+
+		public float GetModifiedThreshold(string key)
+		{
+			return GetModifiedArmor(
+				key,
+				(info) => info.threshold,
+				(info, ancestorArmor) => Mathf.Min(info.threshold, ancestorArmor.GetModifiedThreshold(key)));
+		}
+
+		private float GetModifiedArmor(string key, System.Func<ArmorInfo, float> getRawValue, System.Func<ArmorInfo, Armor, float> getCombinedValue)
+		{
+			var info = GetArmorInfo(key);
+			if (info == null)
+				return 0f;
+
+			if (m_overrideAncestor || ancestorArmor == null)
+				return getRawValue(info);
+
+			return getCombinedValue(info, ancestorArmor);
+		}
 
 		public ArmorInfo GetArmorInfo(string key)
 		{
@@ -44,6 +90,11 @@ namespace UnityEngine.Workshop
 			{
 				m_armors.Refresh();
 			}
+		}
+
+		private bool HasAncestorArmor()
+		{
+			return this.GetComponentInAncestor<Armor>() != null;
 		}
 
 #endif
@@ -156,6 +207,8 @@ namespace UnityEngine.Workshop
 
 			[SerializeField, Tooltip("Threshold damage reduction prevents all damage above a given threshold, while having no effect on damage below that threshold.")]
 			public float threshold;
+
+			private Armor m_parentArmor;
 
 			#endregion
 

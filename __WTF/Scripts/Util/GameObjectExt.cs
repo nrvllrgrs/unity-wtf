@@ -492,6 +492,42 @@ public static class GameObjectExt
 		return value;
 	}
 
+	public static T GetComponentInDescendant<T>(this Component component)
+		where T : Component
+	{
+		return component.gameObject.GetComponentInDescendant<T>();
+	}
+
+	public static T GetComponentInDescendant<T>(this GameObject gameObject)
+		where T : Component
+	{
+		T owned = gameObject.GetComponent<T>();
+		T[] list = gameObject.GetComponentsInChildren<T>();
+
+		if (owned != null)
+		{
+			list = list.Except(new[] { owned }).ToArray();
+		}
+
+		return list.FirstOrDefault();
+	}
+
+	public static T GetComponentInDescendant<T>(this Component component, ref T value)
+		where T : Component
+	{
+		return component.gameObject.GetComponentInDescendant(ref value);
+	}
+
+	public static T GetComponentInDescendant<T>(this GameObject gameObject, ref T value)
+		where T : Component
+	{
+		if (value == null)
+		{
+			value = gameObject.GetComponentInDescendant<T>();
+		}
+		return value;
+	}
+
 	public static T GetComponentInParent<T>(this GameObject gameObject, ref T value)
 		where T : Component
 	{
@@ -514,6 +550,42 @@ public static class GameObjectExt
 		if (value == null || value.Length == 0)
 		{
 			value = gameObject.GetComponentsInParent<T>();
+		}
+		return value;
+	}
+
+	public static T GetComponentInAncestor<T>(this Component component)
+		where T : Component
+	{
+		return component.gameObject.GetComponentInAncestor<T>();
+	}
+
+	public static T GetComponentInAncestor<T>(this GameObject gameObject)
+		where T : Component
+	{
+		T owned = gameObject.GetComponent<T>();
+		T[] list = gameObject.GetComponentsInParent<T>();
+
+		if (owned != null)
+		{
+			list = list.Except(new[] { owned }).ToArray();
+		}
+
+		return list.FirstOrDefault();
+	}
+
+	public static T GetComponentInAncestor<T>(this Component component, ref T value)
+		where T : Component
+	{
+		return component.gameObject.GetComponentInAncestor(ref value);
+	}
+
+	public static T GetComponentInAncestor<T>(this GameObject gameObject, ref T value)
+		where T : Component
+	{
+		if (value == null)
+		{
+			value = gameObject.GetComponentInAncestor<T>();
 		}
 		return value;
 	}
