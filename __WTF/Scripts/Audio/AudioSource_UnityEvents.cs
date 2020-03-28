@@ -3,6 +3,10 @@ using Sirenix.OdinInspector;
 
 namespace UnityEngine.Workshop
 {
+	[System.Serializable]
+	public class AudioSourceEvent : UnityEvent<AudioSource>
+	{ }
+
 	public class AudioSource_UnityEvents : MonoBehaviour
 	{
 		#region Variables
@@ -17,10 +21,10 @@ namespace UnityEngine.Workshop
 		#region Events
 
 		[FoldoutGroup("Events")]
-		public UnityEvent onStarted = new UnityEvent();
+		public AudioSourceEvent onStarted = new AudioSourceEvent();
 
 		[FoldoutGroup("Events")]
-		public UnityEvent onStopped = new UnityEvent();
+		public AudioSourceEvent onStopped = new AudioSourceEvent();
 
 		#endregion
 
@@ -38,7 +42,7 @@ namespace UnityEngine.Workshop
 			{
 				if (!m_wasPlaying)
 				{
-					onStarted.Invoke();
+					onStarted.Invoke(audio);
 				}
 
 				m_wasPlaying = true;
@@ -47,7 +51,7 @@ namespace UnityEngine.Workshop
 			{
 				if (m_wasPlaying)
 				{
-					onStopped.Invoke();
+					onStopped.Invoke(audio);
 				}
 
 				m_wasPlaying = false;
