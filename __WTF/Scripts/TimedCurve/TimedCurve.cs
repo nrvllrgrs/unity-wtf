@@ -137,22 +137,12 @@ namespace UnityEngine.Workshop
 		[Button, FoldoutGroup("Editor")]
 		public void Forward()
 		{
-			if (!isPlaying)
-			{
-				m_remainingTime = duration;
-			}
-
 			Toggle(false);
 		}
 
 		[Button, FoldoutGroup("Editor")]
 		public void Reverse()
 		{
-			if (!isPlaying)
-			{
-				m_remainingTime = 0f;
-			}
-
 			Toggle(true);
 		}
 
@@ -164,6 +154,11 @@ namespace UnityEngine.Workshop
 
 		private void Toggle(bool isReversed)
 		{
+			if (!isPlaying)
+			{
+				m_remainingTime = !isReversed ? duration : 0f;
+			}
+
 			m_isReversed = isReversed;
 			isPlaying = true;
 		}
