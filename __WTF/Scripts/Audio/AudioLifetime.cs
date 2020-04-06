@@ -18,11 +18,16 @@
 
 		#region Methods
 
+		private void OnEnable()
+		{
+			m_prevIsPlaying = false;
+		}
+
 		private void Update()
 		{
 			if (!audio.isPlaying && m_prevIsPlaying)
 			{
-				Destroy(gameObject);
+				GameObjectUtil.Destroy(gameObject);
 			}
 
 			m_prevIsPlaying = audio.isPlaying;
