@@ -52,6 +52,15 @@ namespace UnityEngine.Workshop
 			entry.Add(item);
 		}
 
+		public void Remove(PoolItem item)
+		{
+			var entry = m_items.FirstOrDefault(x => Equals(x.key, item.key));
+			if (entry != null)
+			{
+				entry.Remove(item);
+			}
+		}
+
 		public PoolItem Get(PoolItem item)
 		{
 			var entry = m_items.FirstOrDefault(x => Equals(x.key, item.key));
@@ -151,6 +160,14 @@ namespace UnityEngine.Workshop
 					Destroy(oldestItem.gameObject);
 				}
 				m_items.Add(item);
+			}
+
+			public void Remove(PoolItem item)
+			{
+				if (!m_items.Contains(item))
+					return;
+
+				m_items.Remove(item);
 			}
 
 			public PoolItem Next()

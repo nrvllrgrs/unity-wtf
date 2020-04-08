@@ -62,6 +62,14 @@ namespace UnityEngine.Workshop
 			m_dirty = true;
 		}
 
+		private void OnDestroy()
+		{
+			if (PoolManager.Exists)
+			{
+				PoolManager.Instance.Remove(this);
+			}
+		}
+
 		#endregion
 
 		#region Editor Methods
