@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using UnityEngine.AI;
 
-namespace UnityEngine.Workshop
+namespace UnityEngine.AI
 {
 	public static class NavMeshUtil
 	{
-		#region Variables
+		#region Fields
 
 		private static Dictionary<string, int> s_agentTypeMap;
 
