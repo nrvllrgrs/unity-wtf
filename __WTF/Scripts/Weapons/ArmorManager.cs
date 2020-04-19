@@ -33,5 +33,16 @@ namespace UnityEngine.Workshop
 		}
 
 		#endregion
+
+		#region Static Methods
+
+		public static string[] AttemptGetDamageTypes()
+		{
+			return Ready
+				? Instance.GetDamageTypes()
+				: new string[] { };
+		}
+
+		#endregion
 	}
 }
