@@ -11,6 +11,8 @@
 		event HealthEventHandler Killed;
 
 		GameObject gameObject { get; }
+		float value { get; }
+		float maxValue { get; }
 
 		void Heal(HealthEventArgs e);
 		void Damage(HealthEventArgs e);

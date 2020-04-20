@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using UnityEngine.Workshop.Events;
+using Sirenix.OdinInspector;
 using Ludiq;
 
 namespace UnityEngine.Workshop
@@ -72,6 +73,8 @@ namespace UnityEngine.Workshop
 		#region Events
 
 		public event System.EventHandler ValueChanged;
+		public event HealthValueEventHandler MaxValueChanged;
+
 		public event HealthEventHandler Healing;
 		public event HealthEventHandler Healed;
 		public event HealthEventHandler Hit;
@@ -84,7 +87,23 @@ namespace UnityEngine.Workshop
 		#region Properties
 
 		public bool isAlive => value > 0;
-		public float maxHealth { get => m_maxHealth; set => m_maxHealth = value; }
+		public float maxValue
+		{
+			get => m_maxHealth;
+			set
+			{
+				// No change, skip
+				if (maxValue == value)
+					return;
+
+				// Store previous maxHealth value
+				float t = m_maxHealth;
+
+				m_maxHealth = value;
+				MaxValueChanged?.Invoke(this, new HealthValueEventArgs(t, value));
+
+			}
+		}
 
 		public virtual float value
 		{
@@ -263,6 +282,7 @@ namespace UnityEngine.Workshop
 	}
 
 	public delegate void HealthEventHandler(object sender, HealthEventArgs e);
+	public delegate void HealthValueEventHandler(object sender, HealthValueEventArgs e);
 
 	[System.Serializable, IncludeInSettings(true)]
 	public class HealthEventArgs : System.EventArgs
@@ -346,5 +366,13 @@ namespace UnityEngine.Workshop
 		}
 
 		#endregion
+	}
+
+	[System.Serializable]
+	public class HealthValueEventArgs : FloatChangedEventArgs
+	{
+		public HealthValueEventArgs(float oldValue, float newValue)
+			: base(oldValue, newValue)
+		{ }
 	}
 }
