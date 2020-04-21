@@ -115,11 +115,7 @@ namespace UnityEngine.Workshop
 					return;
 
 				m_health = value;
-
-				if (ValueChanged != null)
-				{
-					ValueChanged.Invoke(this, System.EventArgs.Empty);
-				}
+				ValueChanged?.Invoke(this, System.EventArgs.Empty);
 			}
 		}
 

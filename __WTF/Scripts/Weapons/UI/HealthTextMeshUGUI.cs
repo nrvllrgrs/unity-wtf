@@ -32,11 +32,13 @@ namespace UnityEngine.Workshop.UI
 		private void OnEnable()
 		{
 			m_health.ValueChanged += ValueChanged;
+			m_health.MaxValueChanged += ValueChanged;
 		}
 
 		private void OnDisable()
 		{
 			m_health.ValueChanged -= ValueChanged;
+			m_health.MaxValueChanged -= ValueChanged;
 		}
 
 		private void ValueChanged(object sender, System.EventArgs e)

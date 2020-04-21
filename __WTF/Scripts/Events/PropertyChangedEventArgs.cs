@@ -4,7 +4,6 @@ namespace UnityEngine.Workshop.Events
 {
 	[System.Serializable]
 	public abstract class PropertyChangedEventArgs<T> : System.EventArgs
-		where T : struct
 	{
 		#region Properties
 
@@ -27,6 +26,13 @@ namespace UnityEngine.Workshop.Events
 	public class FloatChangedEventArgs : PropertyChangedEventArgs<float>
 	{
 		public FloatChangedEventArgs(float oldValue, float newValue)
+			: base(oldValue, newValue)
+		{ }
+	}
+
+	public class StringChangedEventArgs : PropertyChangedEventArgs<string>
+	{
+		public StringChangedEventArgs(string oldValue, string newValue)
 			: base(oldValue, newValue)
 		{ }
 	}
