@@ -119,6 +119,8 @@ namespace UnityEngine.Workshop
 			}
 		}
 
+		public float percent => value / maxValue;
+
 		/// <summary>
 		/// Indicates whether component can regenerate at this moment
 		/// </summary>
