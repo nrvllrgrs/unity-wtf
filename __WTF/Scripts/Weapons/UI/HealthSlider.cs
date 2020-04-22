@@ -52,7 +52,7 @@ namespace UnityEngine.Workshop.UI
 				slider.value = UnityUtil.Remap(
 					health.value,
 					0f,
-					health.maxHealth,
+					health.maxValue,
 					slider.minValue,
 					slider.maxValue);
 			}

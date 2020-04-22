@@ -58,6 +58,14 @@ namespace UnityEngine.Workshop
 				(info, ancestorArmor) => Mathf.Min(info.threshold, ancestorArmor.GetModifiedThreshold(key)));
 		}
 
+		public float GetModifiedProtection(string key)
+		{
+			return GetModifiedArmor(
+				key,
+				(info) => info.protection,
+				(info, ancestorArmor) => info.protection + ancestorArmor.GetModifiedProtection(key));
+		}
+
 		private float GetModifiedArmor(string key, System.Func<ArmorInfo, float> getRawValue, System.Func<ArmorInfo, Armor, float> getCombinedValue)
 		{
 			var info = GetArmorInfo(key);
@@ -208,6 +216,9 @@ namespace UnityEngine.Workshop
 			[SerializeField, Tooltip("Threshold damage reduction prevents all damage above a given threshold, while having no effect on damage below that threshold.")]
 			public float threshold;
 
+			[SerializeField, Tooltip("Percentage damage reduction that lowers damage by a fixed factor of the target's maximum heath.")]
+			public float protection;
+
 			private Armor m_parentArmor;
 
 			#endregion
@@ -287,6 +298,7 @@ namespace UnityEngine.Workshop
 					SetValue(ref info.absorption, EditorGUILayout.FloatField("Absorption", info.absorption), ref dirty);
 					SetValue(ref info.resistance, Mathf.Min(EditorGUILayout.FloatField("Resistance", info.resistance), 1f), ref dirty);
 					SetValue(ref info.threshold, Mathf.Max(EditorGUILayout.FloatField("Threshold", info.threshold), 0f), ref dirty);
+					SetValue(ref info.protection, Mathf.Min(EditorGUILayout.FloatField("Protection", info.protection), 1f), ref dirty);
 
 					--EditorGUI.indentLevel;
 				}
