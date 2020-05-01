@@ -62,9 +62,9 @@
 
 		private void Update()
 		{
-			if (Camera.main != null)
+			if (CameraUtil.main != null)
 			{
-				float angle = Vector3.Angle(facingTransform.GetAxis(m_axisType), facingTransform.position.GetDirection(Camera.main.transform.position));
+				float angle = Vector3.Angle(facingTransform.GetAxis(m_axisType), facingTransform.position.GetDirection(CameraUtil.main.transform.position));
 				percent = 1f - UnityUtil.GetPercent(angle, m_angleLimits.x, m_angleLimits.y);
 			}
 		}

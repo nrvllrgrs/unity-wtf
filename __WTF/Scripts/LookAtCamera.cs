@@ -23,8 +23,8 @@ namespace UnityEngine.Workshop
 		protected virtual void OnEnable()
 		{
 			this.WaitUntil(
-				() => { return Camera.main != null; },
-				() => { target = Camera.main.transform; });
+				() => { return CameraUtil.main != null; },
+				() => { target = CameraUtil.main.transform; });
 		}
 
 		protected override void UpdateFacing()
@@ -35,11 +35,11 @@ namespace UnityEngine.Workshop
 			}
 			else if (!reverse)
 			{
-				transform.rotation = Quaternion.LookRotation(-Camera.main.transform.forward);
+				transform.rotation = Quaternion.LookRotation(-CameraUtil.main.transform.forward);
 			}
 			else
 			{
-				transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+				transform.rotation = Quaternion.LookRotation(CameraUtil.main.transform.forward);
 			}
 		}
 
