@@ -56,6 +56,11 @@ namespace UnityEngine.Workshop
 			m_set.ItemRemoved += (object sender, SetLogicEventArgs e) =>
 			{
 				onItemRemoved.Invoke(e.item);
+
+				if (m_set.count == 0)
+				{
+					onEmpty.Invoke();
+				}
 			};
 		}
 
@@ -67,11 +72,6 @@ namespace UnityEngine.Workshop
 		public virtual void Remove(GameObject item)
 		{
 			m_set.Remove(item);
-
-			if (m_set.count == 0)
-			{
-				onEmpty.Invoke();
-			}
 		}
 
 		public virtual void DestroyItems()
