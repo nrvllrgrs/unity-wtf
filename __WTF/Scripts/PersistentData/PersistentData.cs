@@ -164,12 +164,12 @@ namespace UnityEngine.Workshop
 
 		#region Observer Methods
 
-		public static void AddObserver(string key, System.Action<PersistentDataEventArgs> action)
+		public static void AddListener(string key, System.Action<PersistentDataEventArgs> action)
 		{
-			AddObserver(DEFAULT_FILENAME, key, action);
+			AddListener(DEFAULT_FILENAME, key, action);
 		}
 
-		public static void AddObserver(string fileName, string key, System.Action<PersistentDataEventArgs> action)
+		public static void AddListener(string fileName, string key, System.Action<PersistentDataEventArgs> action)
 		{
 			Dictionary<string, HashSet<System.Action<PersistentDataEventArgs>>> fileObservers;
 			if (!s_observers.ContainsKey(fileName))
@@ -196,12 +196,12 @@ namespace UnityEngine.Workshop
 			actions.Add(action);
 		}
 
-		public static void RemoveObserver(string key, System.Action<PersistentDataEventArgs> action)
+		public static void RemoveListener(string key, System.Action<PersistentDataEventArgs> action)
 		{
-			RemoveObserver(DEFAULT_FILENAME, key, action);
+			RemoveListener(DEFAULT_FILENAME, key, action);
 		}
 
-		public static void RemoveObserver(string fileName, string key, System.Action<PersistentDataEventArgs> action)
+		public static void RemoveListener(string fileName, string key, System.Action<PersistentDataEventArgs> action)
 		{
 			if (TryGetActions(fileName, key, out HashSet<System.Action<PersistentDataEventArgs>> actions))
 			{

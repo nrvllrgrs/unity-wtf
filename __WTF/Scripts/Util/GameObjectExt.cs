@@ -466,20 +466,20 @@ public static class GameObjectExt
 		return component.gameObject.GetComponent(ref value);
 	}
 
-	public static T GetComponentInChildren<T>(this GameObject gameObject, ref T value)
+	public static T GetComponentInChildren<T>(this GameObject gameObject, ref T value, bool includeInactive = false)
 		where T : Component
 	{
 		if (value == null)
 		{
-			value = gameObject.GetComponentInChildren<T>();
+			value = gameObject.GetComponentInChildren<T>(includeInactive);
 		}
 		return value;
 	}
 
-	public static T GetComponentInChildren<T>(this Component component, ref T value)
+	public static T GetComponentInChildren<T>(this Component component, ref T value, bool includeInactive = false)
 		where T : Component
 	{
-		return component.gameObject.GetComponentInChildren(ref value);
+		return component.gameObject.GetComponentInChildren(ref value, includeInactive);
 	}
 
 	public static T[] GetComponentsInChildren<T>(this GameObject gameObject, ref T[] value)
@@ -492,17 +492,17 @@ public static class GameObjectExt
 		return value;
 	}
 
-	public static T GetComponentInDescendant<T>(this Component component)
+	public static T GetComponentInDescendant<T>(this Component component, bool includeInactive = false)
 		where T : Component
 	{
-		return component.gameObject.GetComponentInDescendant<T>();
+		return component.gameObject.GetComponentInDescendant<T>(includeInactive);
 	}
 
-	public static T GetComponentInDescendant<T>(this GameObject gameObject)
+	public static T GetComponentInDescendant<T>(this GameObject gameObject, bool includeInactive = false)
 		where T : Component
 	{
 		T owned = gameObject.GetComponent<T>();
-		T[] list = gameObject.GetComponentsInChildren<T>();
+		T[] list = gameObject.GetComponentsInChildren<T>(includeInactive);
 
 		if (owned != null)
 		{
@@ -512,18 +512,18 @@ public static class GameObjectExt
 		return list.FirstOrDefault();
 	}
 
-	public static T GetComponentInDescendant<T>(this Component component, ref T value)
+	public static T GetComponentInDescendant<T>(this Component component, ref T value, bool includeInactive = false)
 		where T : Component
 	{
-		return component.gameObject.GetComponentInDescendant(ref value);
+		return component.gameObject.GetComponentInDescendant(ref value, includeInactive);
 	}
 
-	public static T GetComponentInDescendant<T>(this GameObject gameObject, ref T value)
+	public static T GetComponentInDescendant<T>(this GameObject gameObject, ref T value, bool includeInactive = false)
 		where T : Component
 	{
 		if (value == null)
 		{
-			value = gameObject.GetComponentInDescendant<T>();
+			value = gameObject.GetComponentInDescendant<T>(includeInactive);
 		}
 		return value;
 	}
