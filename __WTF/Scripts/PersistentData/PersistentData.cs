@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
-using UnityEngine;
 using Sirenix.Serialization;
 using Ludiq;
 
@@ -12,12 +11,36 @@ using UnityEditor;
 
 namespace UnityEngine.Workshop
 {
+	public class PersistentDataEventArgs : System.EventArgs
+	{
+		#region Properties
+
+		public object value { get; private set; }
+		public bool asBool => System.Convert.ToBoolean(value);
+		public int asInt => System.Convert.ToInt32(value);
+		public float asFloat => System.Convert.ToSingle(value);
+		public string asString => System.Convert.ToString(value);
+
+		#endregion
+
+		#region Constructors
+
+		public PersistentDataEventArgs(object value)
+		{
+			this.value = value;
+		}
+
+		#endregion
+	}
+
 	[IncludeInSettings(true)]
 	public static class PersistentData
 	{
 		#region Variables
 
 		private static Dictionary<string, Dictionary<string, object>> s_data;
+		private static Dictionary<string, Dictionary<string, HashSet<System.Action<PersistentDataEventArgs>>>> s_observers = new Dictionary<string, Dictionary<string, HashSet<System.Action<PersistentDataEventArgs>>>>();
+
 		private static string DEFAULT_FILENAME = "data";
 		public static readonly string PASSWORD = "S=N=jgkRXcS7gk_u";
 
@@ -134,6 +157,82 @@ namespace UnityEngine.Workshop
 		public static void Set<T>(string fileName, string key, T value)
 		{
 			GetEntry(fileName).Set(key, value);
+			InvokeActions(fileName, key, value);
+		}
+
+		#endregion
+
+		#region Observer Methods
+
+		public static void AddObserver(string key, System.Action<PersistentDataEventArgs> action)
+		{
+			AddObserver(DEFAULT_FILENAME, key, action);
+		}
+
+		public static void AddObserver(string fileName, string key, System.Action<PersistentDataEventArgs> action)
+		{
+			Dictionary<string, HashSet<System.Action<PersistentDataEventArgs>>> fileObservers;
+			if (!s_observers.ContainsKey(fileName))
+			{
+				fileObservers = new Dictionary<string, HashSet<System.Action<PersistentDataEventArgs>>>();
+				s_observers.Add(fileName, fileObservers);
+			}
+			else
+			{
+				fileObservers = s_observers[fileName];
+			}
+
+			HashSet<System.Action<PersistentDataEventArgs>> actions;
+			if (!fileObservers.ContainsKey(key))
+			{
+				actions = new HashSet<System.Action<PersistentDataEventArgs>>();
+				fileObservers.Add(key, actions);
+			}
+			else
+			{
+				actions = fileObservers[key];
+			}
+
+			actions.Add(action);
+		}
+
+		public static void RemoveObserver(string key, System.Action<PersistentDataEventArgs> action)
+		{
+			RemoveObserver(DEFAULT_FILENAME, key, action);
+		}
+
+		public static void RemoveObserver(string fileName, string key, System.Action<PersistentDataEventArgs> action)
+		{
+			if (TryGetActions(fileName, key, out HashSet<System.Action<PersistentDataEventArgs>> actions))
+			{
+				actions.Remove(action);
+			}
+		}
+
+		private static void InvokeActions(string fileName, string key, object value)
+		{
+			if (TryGetActions(fileName, key, out HashSet<System.Action<PersistentDataEventArgs>> actions))
+			{
+				foreach (var action in actions)
+				{
+					action.Invoke(new PersistentDataEventArgs(value));
+				}
+			}
+		}
+
+		private static bool TryGetActions(string fileName, string key, out HashSet<System.Action<PersistentDataEventArgs>> actions)
+		{
+			actions = null;
+
+			if (!s_observers.ContainsKey(fileName))
+				return false;
+
+			var fileObservers = s_observers[fileName];
+			if (!fileObservers.ContainsKey(key))
+				return false;
+
+			actions = fileObservers[key];
+			return true;
 		}
 
 		#endregion
