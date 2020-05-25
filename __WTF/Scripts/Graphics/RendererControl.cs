@@ -53,7 +53,7 @@ public class RendererControl : MonoBehaviour
 				m_rendererStatuses = new Dictionary<Renderer, bool>();
 				foreach (var renderer in GetChildRenderers(transform))
 				{
-					m_rendererStatuses.Add(renderer, false);
+					m_rendererStatuses.Add(renderer, m_showOnAwake);
 				}
 			}
 			return m_rendererStatuses;
