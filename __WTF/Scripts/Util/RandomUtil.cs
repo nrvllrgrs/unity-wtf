@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using Ludiq;
 
 [IncludeInSettings(true)]
@@ -136,7 +137,7 @@ public static class RandomUtil
 			s = v1 * v1 + v2 * v2;
 		} while (s >= 1.0f || s == 0f);
 
-		s = UnityEngine.Mathf.Sqrt((-2.0f * UnityEngine.Mathf.Log(s)) / s);
+		s = Mathf.Sqrt((-2.0f * Mathf.Log(s)) / s);
 		return v1 * s;
 	}
 
@@ -149,6 +150,14 @@ public static class RandomUtil
 	public static float Gaussian(float mean, float stdDeviation)
 	{
 		return mean + Gaussian() * stdDeviation;
+	}
+
+	public static Vector3 RandomVariant(Vector3 variance)
+	{
+		return new Vector3(
+			UnityEngine.Random.Range(-variance.x, variance.x),
+			UnityEngine.Random.Range(-variance.y, variance.y),
+			UnityEngine.Random.Range(-variance.z, variance.z));
 	}
 }
 
