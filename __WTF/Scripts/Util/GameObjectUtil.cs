@@ -64,7 +64,7 @@ public static class GameObjectUtil
 		var instance = PoolManager.Instance.Get(item);
 		if (instance == null)
 		{
-			Debug.LogErrorFormat("Could not instantiate {0}! You may want to increase the {1} limit.", item.name, item.key);
+			Debug.LogWarningFormat("Could not instantiate {0}! You may want to increase the {1} limit.", item.name, item.key);
 			return null;
 		}
 
