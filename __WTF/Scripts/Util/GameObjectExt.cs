@@ -466,6 +466,20 @@ public static class GameObjectExt
 		return component.gameObject.GetComponent(ref value);
 	}
 
+	public static T[] GetComponents<T>(this GameObject gameObject, ref T[] value)
+	{
+		if (value == null || value.Length == 0)
+		{
+			value = gameObject.GetComponents<T>();
+		}
+		return value;
+	}
+
+	public static T[] GetComponents<T>(this Component component, ref T[] value)
+	{
+		return component.gameObject.GetComponents(ref value);
+	}
+
 	public static T GetComponentInChildren<T>(this GameObject gameObject, ref T value, bool includeInactive = false)
 		where T : Component
 	{
