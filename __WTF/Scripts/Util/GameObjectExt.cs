@@ -706,4 +706,23 @@ public static class GameObjectExt
 
 		return result;
 	}
+
+	public static void SetMaterial(this GameObject obj, Material material, bool includeChildren = false)
+	{
+		if (!includeChildren)
+		{
+			var renderer = obj.GetComponent<Renderer>();
+			if (renderer != null)
+			{
+				renderer.sharedMaterials = Enumerable.Repeat(material, renderer.sharedMaterials.Length).ToArray();
+			}
+		}
+		else
+		{
+			foreach (var renderer in obj.GetComponentsInChildren<Renderer>(true))
+			{
+				renderer.sharedMaterials = Enumerable.Repeat(material, renderer.sharedMaterials.Length).ToArray();
+			}
+		}
+	}
 }
