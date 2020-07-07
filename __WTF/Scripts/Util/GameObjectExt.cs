@@ -707,7 +707,7 @@ public static class GameObjectExt
 		return result;
 	}
 
-	public static void SetMaterial(this GameObject obj, Material material, bool includeChildren = false)
+	public static void SetSharedMaterial(this GameObject obj, Material material, bool includeChildren = false)
 	{
 		if (!includeChildren)
 		{
@@ -723,6 +723,33 @@ public static class GameObjectExt
 			{
 				renderer.sharedMaterials = Enumerable.Repeat(material, renderer.sharedMaterials.Length).ToArray();
 			}
+		}
+	}
+
+	public static void SetSharedColor(this GameObject obj, string paramName, Color color, bool includeChildren = false)
+	{
+		if (!includeChildren)
+		{
+			var renderer = obj.GetComponent<Renderer>();
+			if (renderer != null)
+			{
+				renderer.SetSharedColor(paramName, color);
+			}
+		}
+		else
+		{
+			foreach (var renderer in obj.GetComponentsInChildren<Renderer>(true))
+			{
+				renderer.SetSharedColor(paramName, color);
+			}
+		}
+	}
+
+	public static void SetSharedColor(this Renderer renderer, string paramName, Color color)
+	{
+		foreach (var material in renderer.sharedMaterials)
+		{
+			material.SetColor(paramName, color);
 		}
 	}
 }
