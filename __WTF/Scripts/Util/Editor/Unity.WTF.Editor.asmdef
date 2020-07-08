@@ -1,0 +1,16 @@
+{
+    "name": "Unity.WTF.Editor",
+    "references": [
+        "GUID:c7e13dca54e1fed42ba68ded65ca685d"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}
