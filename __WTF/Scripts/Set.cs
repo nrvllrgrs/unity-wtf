@@ -24,9 +24,10 @@ namespace UnityEngine.Workshop
 
 		#region Properties
 
-		[ShowInInspector, ReadOnly]
 		public int count { get => m_set.count; }
 		public bool isEmpty { get => count == 0; }
+
+		[ShowInInspector, ReadOnly]
 		public GameObject[] items { get => m_set.items; }
 
 		#endregion
