@@ -466,6 +466,20 @@ public static class GameObjectExt
 		return component.gameObject.GetComponent(ref value);
 	}
 
+	public static T[] GetComponents<T>(this GameObject gameObject, ref T[] value)
+	{
+		if (value == null || value.Length == 0)
+		{
+			value = gameObject.GetComponents<T>();
+		}
+		return value;
+	}
+
+	public static T[] GetComponents<T>(this Component component, ref T[] value)
+	{
+		return component.gameObject.GetComponents(ref value);
+	}
+
 	public static T GetComponentInChildren<T>(this GameObject gameObject, ref T value, bool includeInactive = false)
 		where T : Component
 	{
@@ -691,5 +705,51 @@ public static class GameObjectExt
 		}
 
 		return result;
+	}
+
+	public static void SetSharedMaterial(this GameObject obj, Material material, bool includeChildren = false)
+	{
+		if (!includeChildren)
+		{
+			var renderer = obj.GetComponent<Renderer>();
+			if (renderer != null)
+			{
+				renderer.sharedMaterials = Enumerable.Repeat(material, renderer.sharedMaterials.Length).ToArray();
+			}
+		}
+		else
+		{
+			foreach (var renderer in obj.GetComponentsInChildren<Renderer>(true))
+			{
+				renderer.sharedMaterials = Enumerable.Repeat(material, renderer.sharedMaterials.Length).ToArray();
+			}
+		}
+	}
+
+	public static void SetSharedColor(this GameObject obj, string paramName, Color color, bool includeChildren = false)
+	{
+		if (!includeChildren)
+		{
+			var renderer = obj.GetComponent<Renderer>();
+			if (renderer != null)
+			{
+				renderer.SetSharedColor(paramName, color);
+			}
+		}
+		else
+		{
+			foreach (var renderer in obj.GetComponentsInChildren<Renderer>(true))
+			{
+				renderer.SetSharedColor(paramName, color);
+			}
+		}
+	}
+
+	public static void SetSharedColor(this Renderer renderer, string paramName, Color color)
+	{
+		foreach (var material in renderer.sharedMaterials)
+		{
+			material.SetColor(paramName, color);
+		}
 	}
 }
